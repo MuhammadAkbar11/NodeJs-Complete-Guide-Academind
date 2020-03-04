@@ -9,5 +9,8 @@
 		"start-server": "node app.js"
 	},
 	"author": "Akbar",
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1"
+	}
 }
