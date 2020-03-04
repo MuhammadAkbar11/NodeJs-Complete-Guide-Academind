@@ -1,0 +1,13 @@
+{
+	"name": "bagian_4__improved-development-workflow-and-debungging",
+	"version": "1.0.0",
+	"description": "Complete Node.js Guide",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node app.js",
+		"start-server": "nodemon app.js"
+	},
+	"author": "Akbar",
+	"license": "ISC"
+}
