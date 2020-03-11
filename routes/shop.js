@@ -12,7 +12,8 @@ router.get('/', (req, res, next) => {
 	res.render('home', {
 		prods: products,
 		pageTitle: 'Home | Shop.com',
-		path: '/'
+		path: '/',
+		hasProducts: products.length > 0
 	});
 });
 
