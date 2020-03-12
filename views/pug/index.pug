@@ -1,0 +1,11 @@
+extends layouts/main-layout.pug
+
+block content
+    form(action="/add-users", method="POST")
+        label(for="name")
+        input(type="text" name="username")
+        button(type="submit") Add User
+
+    ul
+        each user in users
+            li #{user.name}
