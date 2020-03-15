@@ -1,1 +1,7 @@
-[{"title":"Penyewaan"},{"title":"junggle book"},{"title":"Costumer"}]
+[
+	{ "title": "Penyewaan", "price": "12" },
+	{ "title": "Penyewaan", "price": "8.00" },
+	{ "title": "Dashboard", "price": "9.01" },
+	{ "title": "Harry Potter", "price": "19.25" },
+	{ "title": "Super Dashboard", "price": "200.000" }
+]
