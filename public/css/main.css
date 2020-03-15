@@ -79,6 +79,8 @@ main {
 }
 
 .card__image img {
+	height: 160px;
+	object-fit: contain;
 	width: 100%;
 }
 
