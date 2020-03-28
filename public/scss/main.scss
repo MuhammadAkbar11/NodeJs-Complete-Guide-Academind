@@ -12,5 +12,6 @@ $navbar-dark-toggler-border-color: $info;
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
 .container {
+	display: -webkit-box;
 	display: flex;
 }
