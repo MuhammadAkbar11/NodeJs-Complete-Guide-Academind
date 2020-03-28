@@ -1,9 +1,1 @@
-[
-	{
-		"id": "123245",
-		"title": "book 1",
-		"price": "19.23",
-		"imageUrl": "https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg",
-		"description": "this fisrt book"
-	}
-]
+[{"id":"123245","title":"book 1","price":"19.23","imageUrl":"https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg","description":"this fisrt book"},{"title":"another products","price":"12","imageUrl":"https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg","description":" check id","id":"0.015528360437034872"}]
