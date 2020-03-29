@@ -69,3 +69,9 @@ exports.getProducts = (req, res, next) => {
 		});
 	});
 };
+// eslint-disable-next-line no-unused-vars
+exports.postDeleteProduct = (req, res, next) => {
+	const prodId = req.body.productId;
+	Product.deleteById(prodId);
+	res.redirect('/admin/products');
+};
