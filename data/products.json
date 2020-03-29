@@ -1,1 +1,23 @@
-[{"id":"123245","title":"book 1","price":"19.23","imageUrl":"https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg","description":"this fisrt book"},{"title":"another products","price":"12","imageUrl":"https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg","description":" check id","id":"0.015528360437034872"}]
+[
+	{
+		"id": "123245",
+		"title": "book 1",
+		"price": "50.000",
+		"imageUrl": "https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg",
+		"description": "this fisrt book"
+	},
+	{
+		"title": "another products",
+		"price": "50.000",
+		"imageUrl": "https://www.717graphicdesign.co.uk/wp-content/uploads/2018/09/book-cover-7.jpg",
+		"description": " check id",
+		"id": "0.015528360437034872"
+	},
+	{
+		"title": "blank book",
+		"price": "50.000",
+		"imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSLKvgYWu1tn4rTx93rxNYJddIKPD7e5VMe4o95JdcJPvj2Qnij",
+		"description": " the  book descriptions",
+		"id": "0.058883449981248726"
+	}
+]
