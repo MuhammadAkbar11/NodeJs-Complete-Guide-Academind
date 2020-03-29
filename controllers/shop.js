@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 const Cart = require('../models/cart');
 
+// eslint-disable-next-line no-unused-vars
 exports.getProducts = (req, res, next) => {
 	// const products = adminData.products;
 	Product.fetchAll(products => {
@@ -12,6 +13,7 @@ exports.getProducts = (req, res, next) => {
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.getDetailProduct = (req, res, next) => {
 	const prodId = req.params.productId;
 	Product.findById(prodId, product => {
@@ -23,6 +25,7 @@ exports.getDetailProduct = (req, res, next) => {
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.getIndex = (req, res, next) => {
 	// const products = adminData.products;
 	Product.fetchAll(products => {
@@ -34,6 +37,7 @@ exports.getIndex = (req, res, next) => {
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.getCart = (req, res, next) => {
 	res.render('shop/cart', {
 		pageTitle: 'Your Cart | phoenix.com',
@@ -41,6 +45,7 @@ exports.getCart = (req, res, next) => {
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
 	Product.findById(prodId, product => {
@@ -49,6 +54,7 @@ exports.postCart = (req, res, next) => {
 	res.redirect('/cart');
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.getCheckout = (req, res, next) => {
 	res.render('shop/checkout', {
 		pageTitle: 'Checkout | phoenix.com',
@@ -56,6 +62,7 @@ exports.getCheckout = (req, res, next) => {
 	});
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.getOrders = (req, res, next) => {
 	res.render('shop/orders', {
 		pageTitle: 'You Order | phoenix.com',
