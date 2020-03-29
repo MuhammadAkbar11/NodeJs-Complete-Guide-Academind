@@ -42,6 +42,8 @@ exports.getEditProduct = (req, res, next) => {
 	});
 };
 
+exports.postEditProducts = (req, res, next) => {};
+
 // eslint-disable-next-line no-unused-vars
 exports.getProducts = (req, res, next) => {
 	Product.fetchAll(products => {
