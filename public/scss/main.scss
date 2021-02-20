@@ -1,0 +1,17 @@
+$info: #2ef8ff;
+
+$theme-colors: (
+	'primary': #0f0235,
+	'secondary': #ff0457,
+	'info': $info
+);
+
+$navbar-dark-color: $info;
+$navbar-dark-toggler-border-color: $info;
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+
+.container {
+	display: -webkit-box;
+	display: flex;
+}
