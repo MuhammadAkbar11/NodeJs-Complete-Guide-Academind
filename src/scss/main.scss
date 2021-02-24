@@ -1,0 +1,25 @@
+$info: #2ef8ff;
+$primary: #ff009d;
+$primary-700: #dd0d8dc9;
+$secondary: #16044b;
+$indigo: #6200ff;
+$danger: #fc265b;
+
+$theme-colors: (
+  "primary": $primary,
+  "primary-700": $primary-700,
+  "secondary": $secondary,
+  "info": $info,
+  "danger": $danger,
+  "indigo": $indigo,
+  "light-gray": #ced4da,
+);
+
+$navbar-dark-color: $info;
+$navbar-dark-toggler-border-color: $info;
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+@import "./layouts/layouts";
+@import "./utils/utils.scss";
+@import "./components/components";
