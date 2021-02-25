@@ -18,7 +18,7 @@ $theme-colors: (
 $navbar-dark-color: $info;
 $navbar-dark-toggler-border-color: $info;
 
-@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "~bootstrap/scss/bootstrap";
 
 @import "./layouts/layouts";
 @import "./utils/utils.scss";
