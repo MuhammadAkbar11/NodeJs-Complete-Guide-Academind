@@ -1,8 +1,19 @@
-const { Sequelize } = require("sequelize");
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
+const uri =
+  "mongodb+srv://akbar:akbar2001@bae2001.7m1a3.mongodb.net/phoenix-shop?retryWrites=true&w=majority";
 
-const sequelize = new Sequelize("nodejs-complete-repeat", "root", "1234", {
-  dialect: "mysql",
-  host: "localhost",
-});
+const mongoConnect = () => {
+  return new Promise((resolve, reject) => {
+    return MongoClient.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+      .then(client => {
+        return resolve(client);
+      })
+      .catch(err => reject(err));
+  });
+};
 
-module.exports = sequelize;
+module.exports = mongoConnect;
