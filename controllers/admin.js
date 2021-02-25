@@ -13,16 +13,13 @@ exports.postAddProducts = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  req.user
-    .createProduct({
-      title_product: title,
-      imgUrl_product: imageUrl,
-      price_product: price,
-      desc_product: description,
-    })
+  const product = new Product(title, price, imageUrl, description);
+  product
+    .save()
     .then(result => {
       res.redirect("/admin/products");
-      console.log("new data has been created!");
+      console.log("new data has been created!!");
+      console.log(result);
     })
     .catch(err => console.log(err));
 };
