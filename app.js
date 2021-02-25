@@ -5,12 +5,12 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database");
+const { mongoConnect } = require("./util/database");
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 // const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   //   .catch(err => console.log(err));
 });
 
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(shopRoutes);
 
 app.use(errorController.get404);
@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5050;
 
 mongoConnect()
   .then(result => {
-    console.log("connected to mongodb", result);
+    // console.log("connected to mongodb", result);
     app.listen(PORT, () => {
       console.log("listening... PORT " + PORT);
     });
