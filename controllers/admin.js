@@ -24,54 +24,62 @@ exports.postAddProducts = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getEditProduct = (req, res, next) => {
-//   const editMode = req.query.edit;
-//   if (!editMode) {
-//     return res.redirect("/admin/admin-products");
-//   }
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect("/admin/admin-products");
+  }
 
-//   const prodId = req.params.productId;
-//   req.user
-//     .getProducts({
-//       where: {
-//         id_product: prodId,
-//       },
-//     })
-//     // Product.findByPk(prodId)
-//     .then(products => {
-//       const product = products[0];
-//       if (!product) {
-//         return res.redirect("/");
-//       }
-//       res.render("admin/admin-form-product", {
-//         pageTitle: "Admin - Edit Product | phoenix.com ",
-//         path: "/admin/edit-product",
-//         editing: editMode,
-//         product: product,
-//       });
-//     });
-// };
+  const prodId = req.params.productId;
+  // req.user
+  //   .getProducts({
+  //     where: {
+  //       id_product: prodId,
+  //     },
+  //   })
+  Product.findById(prodId).then(product => {
+    console.log(product);
+    if (!product) {
+      return res.redirect("/admin/product");
+    }
+    res.render("admin/admin-form-product", {
+      pageTitle: "Admin - Edit Product | phoenix.com ",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+    });
+  });
+};
 
-// exports.postEditProducts = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   const updatedTitle = req.body.title;
-//   const updatedPrice = req.body.price;
-//   const updatedImageUrl = req.body.imageUrl;
-//   const updatedDescription = req.body.description;
-//   Product.findByPk(prodId)
-//     .then(product => {
-//       product.title_product = updatedTitle;
-//       product.price_product = updatedPrice;
-//       product.desc_product = updatedDescription;
-//       product.imgUrl_product = updatedImageUrl;
-//       return product.save();
-//     })
-//     .then(result => {
-//       console.log("Updated Product");
-//       res.redirect("/admin/products");
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.postEditProducts = (req, res, next) => {
+  const prodId = req.body.productId;
+  const updatedTitle = req.body.title;
+  const updatedPrice = req.body.price;
+  const updatedImageUrl = req.body.imageUrl;
+  const updatedDescription = req.body.description;
+
+  const ProductM = new Product(
+    prodId,
+    updatedTitle,
+    updatedPrice,
+    updatedDescription,
+    updatedImageUrl
+  );
+  ProductM.update(prodId)
+    // .catch(err => console.log(err));
+    // Product.findByPk(prodId)
+    //   .then(product => {
+    //     product.title_product = updatedTitle;
+    //     product.price_product = updatedPrice;
+    //     product.desc_product = updatedDescription;
+    //     product.imgUrl_product = updatedImageUrl;
+    //     return product.save();
+    //   })
+    .then(result => {
+      res.redirect("/admin/products");
+    })
+    .catch(err => console.log(err));
+};
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()

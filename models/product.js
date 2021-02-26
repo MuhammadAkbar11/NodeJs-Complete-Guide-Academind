@@ -2,7 +2,8 @@ const mongodb = require("mongodb");
 const { getDb } = require("../util/database");
 
 class Product {
-  constructor(title, price, description, imgUrl) {
+  constructor(id, title, price, description, imgUrl) {
+    this.id = id;
     this.title = title;
     this.price = price;
     this.description = description;
@@ -23,6 +24,32 @@ class Product {
         console.log(res);
       })
       .catch(err => console.log(err));
+  }
+
+  update(id) {
+    const updated = {
+      title: this.title,
+      price: this.price,
+      description: this.description,
+      imgUrl: this.imgUrl,
+    };
+
+    const db = getDb();
+
+    return db
+      .collection("products")
+      .updateOne(
+        {
+          _id: new mongodb.ObjectID(this.id),
+        },
+        {
+          $set: {
+            ...updated,
+          },
+        }
+      )
+      .then(result => result)
+      .catch(err => err);
   }
 
   static findById(id) {

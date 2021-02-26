@@ -31,7 +31,7 @@
                       <% if (editing) { %>
                       <input
                         type="hidden"
-                        value="<%= product.id_product %>"
+                        value="<%= product._id %>"
                         name="productId"
                       />
                       <% } %>
@@ -45,7 +45,7 @@
                             class="form-control form-control-lg bg-transparent"
                             name="title"
                             id="title"
-                            value="<% if (editing) { %><%= product.title_product %><% } %>"
+                            value="<% if (editing) { %><%= product.title %><% } %>"
                           />
                         </div>
                       </div>
@@ -62,7 +62,7 @@
                             name="price"
                             id="price"
                             step="0.01"
-                            value="<% if (editing) { %><%= product.price_product %><% } %>"
+                            value="<% if (editing) { %><%= product.price %><% } %>"
                           />
                         </div>
                       </div>
@@ -80,7 +80,7 @@
                             class="form-control form-control-lg bg-transparent"
                             name="imageUrl"
                             id="imageUrl"
-                            value="<% if (editing) { %><%= product.imgUrl_product %><% } %>"
+                            value="<% if (editing) { %><%= product.imgUrl %><% } %>"
                           />
                         </div>
                       </div>
@@ -98,7 +98,7 @@
                             cols="30"
                             rows="3"
                           >
-<% if (editing) { %><%= product.desc_product %><% } %></textarea
+<% if (editing) { %><%= product.description %><% } %></textarea
                           >
                         </div>
                       </div>
