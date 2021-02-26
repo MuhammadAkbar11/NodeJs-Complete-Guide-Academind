@@ -52,16 +52,6 @@ class Product {
       .catch(err => err);
   }
 
-  deleteById() {
-    const db = getDb();
-
-    return db
-      .collection("products")
-      .deleteOne({ _id: new mongodb.ObjectID(this.id) })
-      .then(result => result)
-      .catch(err => err);
-  }
-
   static findById(id) {
     const db = getDb();
 
@@ -85,6 +75,16 @@ class Product {
         return res;
       })
       .catch(err => console.log(err));
+  }
+
+  static deleteById(prodId) {
+    const db = getDb();
+
+    return db
+      .collection("products")
+      .deleteOne({ _id: new mongodb.ObjectID(prodId) })
+      .then(result => result)
+      .catch(err => err);
   }
 }
 
