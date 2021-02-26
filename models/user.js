@@ -24,12 +24,25 @@ class UserModel {
   }
 
   addToCart(product) {
-    // const cartProduct = this.cart.items.findIndex(cp => {
-    //   return cp._id === product.id
-    // });
+    const cartProductIndex = this.cart.items.findIndex(cp => {
+      return cp.productId.toString() === product._id.toString();
+    });
+
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+
+    if (cartProductIndex >= 0) {
+      newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+      updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+      updatedCartItems.push({
+        productId: new MongoDb.ObjectID(product._id),
+        quantity: newQuantity,
+      });
+    }
 
     const updatedCart = {
-      items: [{ productId: new MongoDb.ObjectID(product._id), qty: 1 }],
+      items: updatedCartItems,
     };
 
     const _db = getDb();
@@ -43,7 +56,6 @@ class UserModel {
   }
 
   static findById(userId) {
-    console.log(userId);
     const _db = getDb();
 
     return _db
