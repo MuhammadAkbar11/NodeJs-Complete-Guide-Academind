@@ -26,7 +26,7 @@ class Product {
       .catch(err => console.log(err));
   }
 
-  update(id) {
+  update() {
     const updated = {
       title: this.title,
       price: this.price,
@@ -48,6 +48,16 @@ class Product {
           },
         }
       )
+      .then(result => result)
+      .catch(err => err);
+  }
+
+  deleteById() {
+    const db = getDb();
+
+    return db
+      .collection("products")
+      .deleteOne({ _id: new mongodb.ObjectID(this.id) })
       .then(result => result)
       .catch(err => err);
   }

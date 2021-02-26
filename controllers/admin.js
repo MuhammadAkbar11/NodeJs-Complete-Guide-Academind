@@ -92,18 +92,18 @@ exports.getProducts = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
-// exports.postDeleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   Product.findByPk(prodId)
-//     .then(product => {
-//       // console.log(product);
-//       return product.destroy();
-//     })
-//     .then(() => {
-//       res.redirect("/admin/products");
-//     })
-//     .catch(err => console.log(err));
-// };
+
+exports.postDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  const ProductModel = new Product(prodId);
+
+  ProductModel.deleteById()
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch(err => console.log(err));
+};
 
 // // basic page
 
