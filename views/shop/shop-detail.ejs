@@ -1,5 +1,4 @@
-<%- include('../layouts/head.ejs') %>
-<%- include('../layouts/header.ejs') %>
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
 <%- include('../layouts/sidebar.ejs') %>
 
 <main class="phoenix-main phoenix-main-100vh">
@@ -8,39 +7,57 @@
     <div class="row">
       <h5 class="font-weight-bold">
         <!-- <i data-feather="package" class="mt-n1 mr-1"></i> -->
-        <h4 class="mt-1"><%= product.title_product %> </h4>
+        <h4 class="mt-1"><%= product.title %></h4>
       </h5>
     </div>
 
-    <div class="row mt-4 phx-h-100 ">
+    <div class="row mt-4 phx-h-100">
       <div class="col-sm-12 px-2 phx-h-100">
         <div class="card mb-3 phx-h-100 phx-card-detail">
-          <div class="row no-gutters ">
-            <div class="col-md-4 ">
-              <img src="<%= product.imgUrl_product %>" class="card-img img-object-cover" alt="...">
+          <div class="row no-gutters">
+            <div class="col-md-4 d-flex align-items-center">
+              <img
+                src="<%= product.imgUrl %>"
+                class="card-img my-auto"
+                alt="..."
+              />
             </div>
             <div class="col-md-7 offset-md-1">
               <div class="card-body d-flex flex-column phx-h-100">
-                <h4 class=""><%= product.title_product %> </h4>
+                <h4 class=""><%= product.title %></h4>
 
-                <h2 class="text-primary my-2 my-md-4 phx-rupiah ">
-                  <%= product.price_product %>
+                <h2 class="text-primary my-2 my-md-4 phx-rupiah">
+                  <%= product.price %>
                 </h2>
 
-                <p class="card-text text-dark ">This is a wider card with supporting text below as a natural lead-in to
-                  additional
-                  content. This content is a little bit longer.</p>
+                <p class="card-text text-dark">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
 
                 <div>
                   <form action="/cart" method="post">
-                    <button class="btn btn-primary mt-2 mt-md-4 mb-5 px-4" type="submit">Add to Cart</button>
-                    <input type="hidden" name="productId" value="<%= product.id_product %>">
+                    <button
+                      class="btn btn-primary mt-2 mt-md-4 mb-5 px-4"
+                      type="submit"
+                    >
+                      Add to Cart
+                    </button>
+                    <input
+                      type="hidden"
+                      name="productId"
+                      value="<%= product._id %>"
+                    />
                   </form>
                 </div>
 
                 <div class="mt-auto">
                   <a href="/products" class="mt-auto text-primary-700">
-                    <small class="text-primary-700"><i data-feather="arrow-left"></i> Back to products page</small>
+                    <small class="text-primary-700"
+                      ><i data-feather="arrow-left"></i> Back to products
+                      page</small
+                    >
                   </a>
                 </div>
               </div>

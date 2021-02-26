@@ -14,19 +14,19 @@ exports.getProducts = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getDetailProduct = (req, res, next) => {
-//   const prodId = req.params.productId;
+exports.getDetailProduct = (req, res, next) => {
+  const prodId = req.params.productId;
 
-//   Product.findByPk(prodId)
-//     .then(product => {
-//       res.render("shop/shop-detail", {
-//         product: product,
-//         pageTitle: product.title_product + " | phoenix.com",
-//         path: "/products",
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+  Product.findById(prodId)
+    .then(product => {
+      res.render("shop/shop-detail", {
+        product: product,
+        pageTitle: product.title + " | phoenix.com",
+        path: "/products",
+      });
+    })
+    .catch(err => console.log(err));
+};
 
 exports.getIndex = (req, res, next) => {
   Product.fetchAll()
