@@ -32,7 +32,7 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 // eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 1996;
 
 mongoConnect()
   .then(result => {
