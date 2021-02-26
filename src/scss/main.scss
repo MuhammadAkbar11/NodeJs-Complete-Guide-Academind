@@ -1,22 +1,24 @@
-$info: #2ef8ff;
-$primary: #ff009d;
-$primary-700: #dd0d8dc9;
-$secondary: #16044b;
-$indigo: #6200ff;
-$danger: #fc265b;
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: $spacer / 4,
+  2: $spacer / 2,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 2,
+  6: $spacer * 2.15,
+  7: $spacer * 2.5,
+  8: $spacer * 3,
+  9: $spacer * 3.5,
+  10: $spacer * 4,
+) !default;
 
-$theme-colors: (
-  "primary": $primary,
-  "primary-700": $primary-700,
-  "secondary": $secondary,
-  "info": $info,
-  "danger": $danger,
-  "indigo": $indigo,
-  "light-gray": #ced4da,
-);
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
-$navbar-dark-color: $info;
-$navbar-dark-toggler-border-color: $info;
+@import "./custom/variables";
+@import "./custom/utilities";
 
 @import "~bootstrap/scss/bootstrap";
 
