@@ -15,7 +15,7 @@
       <div class="col-lg-11 col-md-12 px-0">
         <div class="card border bg-transparent shadow pt-2">
           <div class="card-header bg-transparent border-0">
-            <a href="/admin/add-product" class="btn btn-primary"
+            <a href="/admin/add-product" class="btn btn-primary text-light"
               ><i data-feather="plus"></i> Add new product</a
             >
           </div>
@@ -39,11 +39,13 @@
                     <td><%= no++ %></td>
                     <td><%= product.title %></td>
                     <td>
-                      <span class="phx-rupiah"> <%= product.price %> </span>
+                      <span class="phx-rupiah">
+                        <%= product.price.rupiah %>
+                      </span>
                     </td>
                     <td><%= product.description %></td>
                     <td>
-                      <img height="70" src="<%= product.imgUrl%>" alt="" />
+                      <img height="70" src="<%= product.imageUrl%>" alt="" />
                     </td>
                     <td>
                       <div class="d-flex flex-nowrap justify-content-center">

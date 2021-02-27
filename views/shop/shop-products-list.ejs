@@ -17,13 +17,15 @@
       <div class="col-lg-3 col-md-4 pl-0 mb-3 phx-card-stretch">
         <div class="card phx-card-product">
           <div class="phx-img-product">
-            <img src="<%= product.imgUrl %>" class="card-img-top" alt=" ..." />
+            <img
+              src="<%= product.imageUrl %>"
+              class="card-img-top"
+              alt=" ..."
+            />
           </div>
           <div class="card-body d-flex flex-column">
             <h5 class="card-title"><%= product.title %></h5>
-            <span class="text-primary phx-rupiah mb-2"
-              ><%= product.price %></span
-            >
+            <span class="text-primary mb-2"><%= product.price.rupiah %></span>
             <p style="font-size: small"><%= product.description %></p>
             <div class="d-flex mt-auto justify-content-between">
               <%- include('../includes/add-to-cart.ejs', {product: product,

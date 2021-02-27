@@ -30,9 +30,8 @@ exports.postAddProducts = (req, res, next) => {
   product
     .save()
     .then(result => {
-      res.redirect("/admin/add-product");
+      res.redirect("/admin/products");
       console.log("new data has been created!!");
-      console.log(result);
     })
     .catch(err => console.log(err));
 };
@@ -78,17 +77,17 @@ exports.postAddProducts = (req, res, next) => {
 //     .catch(err => console.log(err));
 // };
 
-// exports.getProducts = (req, res, next) => {
-//   Product.fetchAll()
-//     .then(products => {
-//       res.render("admin/admin-products", {
-//         prods: products,
-//         pageTitle: "Admin - Products | phoenix.com  💌  ",
-//         path: "/admin/products",
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getProducts = (req, res, next) => {
+  ProductModel.find()
+    .then(products => {
+      res.render("admin/admin-products", {
+        prods: products,
+        pageTitle: "Admin - Products | phoenix.com  💌  ",
+        path: "/admin/products",
+      });
+    })
+    .catch(err => console.log(err));
+};
 
 // exports.postDeleteProduct = (req, res, next) => {
 //   const prodId = req.body.productId;
