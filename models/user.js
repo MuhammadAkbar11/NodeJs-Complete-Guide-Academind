@@ -82,8 +82,13 @@ class UserModel {
           return sum + +i.price * +i.quantity;
         }, 0);
 
+        const totalItems = cartItems.reduce((sum, i) => {
+          return sum + +i.quantity;
+        }, 0);
+
         return {
           cartItems: cartItems,
+          totalItems: totalItems,
           totalPrice: {
             num: totalPrice,
             rupiah: formatRupiah(totalPrice),

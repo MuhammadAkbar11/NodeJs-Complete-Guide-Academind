@@ -42,13 +42,13 @@ exports.getCart = (req, res, next) => {
   req.user
     .getCart()
     .then(result => {
-      const { cartItems, totalPrice } = result;
+      const { cartItems, totalPrice, totalItems } = result;
 
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
         products: cartItems,
-        items: cartItems.length,
+        items: totalItems,
         totalPrice: totalPrice,
       });
     })
