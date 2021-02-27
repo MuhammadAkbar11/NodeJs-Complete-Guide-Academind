@@ -4,59 +4,91 @@
 <main class="phoenix-main">
   <div class="container-fluid">
     <!-- Title page -->
-    <div class="row">
-      <h5 class="font-weight-bold">
-        <i data-feather="shopping-cart" class="mt-n1 mr-1"></i>
-        <span class="mt-1">Cart</span>
-      </h5>
-    </div>
 
     <div class="row mt-4 mb-5">
-      <div class="col-sm-7 pl-0">
-        <div class="card card-body border-0 rounded-0 bg-transparent pt-0 pl-0">
+      <div class="col-md-7 pl-0">
+        <div class="row mb-5">
+          <div class="fw-bold d-flex align-items-center">
+            <i data-feather="shopping-cart" class=""></i>
+            <p class="ms-3 my-0 fs-5">Shopping Cart</p>
+          </div>
+        </div>
+        <div
+          class="card card-body border-0 rounded-0 bg-transparent pt-0 ps-0 pe-3"
+        >
           <div class="table-responsive">
             <table class="table table-borderless">
-              <thead>
-                <tr>
-                  <th scope="col">Products</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">X</th>
+              <thead class="text-uppercase">
+                <tr class="border-top border-bottom lh-lg fs-6 text-center">
+                  <td scope="col" class="text-start">Products</td>
+                  <td scope="col">Quantity</td>
+                  <td scope="col" colspan="2">Price</td>
+                  <td scope="col">Total</td>
                 </tr>
               </thead>
-              <tbody class="text-black-50">
+              <tbody>
                 <tr>
-                  <td colspan="4"></td>
+                  <td></td>
                 </tr>
                 <% if(products.length > 0) { %> <% products.forEach(prod=> { %>
-                <tr>
+                <tr class="lh-lg">
                   <td>
                     <div class="d-flex">
                       <div
-                        style="width: 70px; height: 70px"
-                        class="position-relative me-2"
+                        style="width: 80px; height: 80px"
+                        class="position-relative me-2 border d-flex"
                       >
                         <img
-                          class="object-contain"
+                          class="object-cover"
                           src="<%= prod.imgUrl
                     %>"
                           alt=""
                         />
                       </div>
 
-                      <div class="d-flex flex-column ms-2">
-                        <p class="font-weight-bold text-dark">
+                      <div class="d-flex flex-column ms-2 flex-nowrap">
+                        <p class="font-weight-bold text-dark text-nowrap">
                           <%= prod.title %>
                         </p>
-                        <p class="text-primary">Diskon 0%</p>
+                        <!-- action cart -->
+                        <div class="flex flex-row mt-auto">
+                          <form action="/cart-delete-item" method="post">
+                            <a
+                              href="/cart-update-item/<%= prod._id %>"
+                              class="btn btn-sm ps-0 btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto"
+                            >
+                              Edit
+                            </a>
+                            <input
+                              type="hidden"
+                              value="<%= prod._id %>"
+                              name="productId"
+                            />
+                            <button
+                              class="btn btn-sm btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto"
+                              type="submit"
+                            >
+                              Delete
+                            </button>
+                          </form>
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <span class="phx-rupiah"><%= prod.price %> </span>
+                  <td class="text-center text-dark-gray">
+                    <span class="px-4 text-nowrap"><%= prod.quantity %></span>
                   </td>
-                  <td><%= prod.quantity %></td>
+                  <td colspan="2">
+                    <span class="text-primary text-nowrap px-4"
+                      ><%= prod.price.rupiah %>
+                    </span>
+                  </td>
                   <td>
+                    <span class="text-primary text-nowrap px-4"
+                      ><%= prod.total %>
+                    </span>
+                  </td>
+                  <!-- <td>
                     <form action="/cart-delete-item" method="post">
                       <input
                         type="hidden"
@@ -70,7 +102,7 @@
                         X
                       </button>
                     </form>
-                  </td>
+                  </td> -->
                 </tr>
                 <% }) %> <% } else { %>
                 <tr>
@@ -82,48 +114,45 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-5 px-0">
+      <div class="col-md-5 px-0">
         <div
-          class="card card-body shadow-sm bg-transparent rounded-0 border-0 px-4"
+          class="card card-body shadow-sm bg-light-gray rounded-0 border-0 px-4 py-5"
         >
-          <h5 class="mt-n1 text-dark">Infomation</h5>
+          <h5 class="mt-n1 text-dark text-uppercase">Summary</h5>
+          <hr />
           <form
             class="d-flex w-100 flex-column"
             action="/create-order"
             method="post"
           >
-            <div class="form-group mt-2">
-              <label for="" class="text-black-50">Shipping</label>
-              <input
-                type="text"
-                name="address"
-                class="form-control bg-light-gray mt-1"
-                placeholder="Shipping"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="" class="text-black-50">Coupon</label>
-              <input
-                type="text"
-                class="form-control bg-light-gray mt-1"
-                placeholder="Enter your coupon here"
-              />
-            </div>
-            <div class="mt-4 d-flex justify-content-between">
-              <p class="text-black-50">Total Product</p>
-              <p><%= items %></p>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p class="text-black-50">Subtotal</p>
+            <div class="d-flex justify-content-between text-dark mt-2">
+              <p class="text-uppercase">
+                Items <span class="ms-2"><%= items %></span>
+              </p>
               <p><%= totalPrice.rupiah %></p>
             </div>
-            <div class="d-flex justify-content-between">
-              <p class="text-black-50">Fee</p>
+            <div class="form-group">
+              <label for="" class="text-dark text-uppercase">Shipping</label>
+              <select
+                name="address"
+                class="form-control bg-white-500 mt-2 rounded-0 py-2"
+                placeholder="Shipping"
+                aria-label="Default select example"
+              >
+                <option value="1" selected>
+                  Standard Delivery - Rp. 7.000
+                </option>
+                <option value="2">Fast Delivery - Rp 15.000</option>
+              </select>
+            </div>
+
+            <div class="d-flex justify-content-between text-dark fs-6 mt-4">
+              <p class="text-uppercase">Fee</p>
               <p>Rp. -</p>
             </div>
             <hr class="mt-n1" />
-            <div class="d-flex justify-content-between">
-              <p class="fw-bold">Total</p>
+            <div class="d-flex justify-content-between text-dark fs-6">
+              <p class="fw-bold text-uppercase">Total</p>
               <p><%= totalPrice.rupiah %></p>
             </div>
             <hr />
@@ -136,6 +165,15 @@
               </button>
             </div>
           </form>
+          <div
+            class="d-flex justify-content-between text-uppercase mt-4 align-items-center"
+          >
+            <p class="my-0 fs-6">Promotional Code</p>
+
+            <a href="#" class="text-decoration-none text-primary fs-4 my-0">
+              +
+            </a>
+          </div>
         </div>
       </div>
     </div>
