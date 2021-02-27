@@ -1,6 +1,4 @@
 const Product = require("../models/product");
-// const Cart = require("../models/cart");
-// const Order = require("../models/order");
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
@@ -81,38 +79,37 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getCheckout = (req, res, next) => {
-//   res.render("shop/checkout", {
-//     pageTitle: "Checkout | phoenix.com",
-//     path: "/checkout",
-//   });
-// };
+exports.getCheckout = (req, res, next) => {
+  res.render("shop/checkout", {
+    pageTitle: "Checkout | phoenix.com",
+    path: "/checkout",
+  });
+};
 
 exports.postOrder = (req, res, next) => {
   let address = req.body.address;
-  const totalPrice = req.body.totalPrice;
 
   if (address === "") {
     address = "Bekasi";
   }
 
   req.user
-    .addOrder(address, totalPrice)
+    .addOrder(address)
     .then(result => {
-      res.redirect("/orders");
+      res.redirect("/cart");
     })
     .catch(err => console.log(err));
 };
 
-// exports.getOrders = (req, res, next) => {
-//   req.user
-//     .getOrders({ include: ["products"] })
-//     .then(orders => {
-//       res.render("shop/shop-orders", {
-//         pageTitle: "My Orders | phoenix.com",
-//         path: "/orders",
-//         orders: orders,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getOrders = (req, res, next) => {
+  req.user
+    .getOrders({ include: ["products"] })
+    .then(orders => {
+      res.render("shop/shop-orders", {
+        pageTitle: "My Orders | phoenix.com",
+        path: "/orders",
+        orders: orders,
+      });
+    })
+    .catch(err => console.log(err));
+};

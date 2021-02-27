@@ -84,7 +84,10 @@ class UserModel {
 
         return {
           cartItems: cartItems,
-          totalPrice: formatRupiah(totalPrice),
+          totalPrice: {
+            num: totalPrice,
+            rupiah: formatRupiah(totalPrice),
+          },
         };
       })
       .catch(err => err);
@@ -104,31 +107,42 @@ class UserModel {
       );
   }
 
-  addOrder(address, totalPrice) {
+  addOrder(address) {
     const _db = getDb();
 
-    return _db
-      .collection("orders")
-      .insertOne({
-        userId: MongoDb.ObjectID(this._id),
-        cart: this.cart,
+    return this.getCart().then(cart => {
+      console.log(cart);
+
+      const order = {
+        user: {
+          userId: MongoDb.ObjectID(this._id),
+          name: this.username,
+        },
+        cart: cart,
         shipping: {
           address: address,
           zip: "27859",
         },
-        totalPrice: totalPrice,
         creatAt: new Date(),
-      })
-      .then(result => {
-        this.cart = { items: [] };
-        return _db
-          .collection("users")
-          .updateOne(
-            { _id: new MongoDb.ObjectID(this._id) },
-            { $set: { cart: { items: [] } } }
-          );
-      });
+        total: cart.totalPrice?.rupiah,
+      };
+
+      return _db
+        .collection("orders")
+        .insertOne(order)
+        .then(result => {
+          this.cart = { items: [] };
+          return _db
+            .collection("users")
+            .updateOne(
+              { _id: new MongoDb.ObjectID(this._id) },
+              { $set: { cart: { items: [] } } }
+            );
+        });
+    });
   }
+
+  getOrders() {}
 
   static findById(userId) {
     const _db = getDb();
