@@ -40,24 +40,22 @@ exports.getIndex = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getCart = (req, res, next) => {
-//   req.user
-//     .getCart()
-//     .then(cart => {
-//       return cart
-//         .getProducts()
-//         .then(product => {
-//           res.render("shop/shop-cart", {
-//             pageTitle: "Your Cart | phoenix.com",
-//             path: "/cart",
-//             products: product,
-//             items: product.length,
-//           });
-//         })
-//         .catch(err => console.log(err));
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getCart = (req, res, next) => {
+  req.user
+    .getCart()
+    .then(result => {
+      const { cartItems, totalPrice } = result;
+
+      res.render("shop/shop-cart", {
+        pageTitle: "Your Cart | phoenix.com",
+        path: "/cart",
+        products: cartItems,
+        items: cartItems.length,
+        totalPrice: totalPrice,
+      });
+    })
+    .catch(err => console.log(err));
+};
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
@@ -66,8 +64,8 @@ exports.postCart = (req, res, next) => {
     .then(product => {
       return req.user.addToCart(product);
     })
-    .then(result => {
-      console.log(result);
+    .then(() => {
+      res.redirect("/cart");
     })
     .catch(err => console.log(err));
 

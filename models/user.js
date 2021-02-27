@@ -1,5 +1,6 @@
 const MongoDb = require("mongodb");
 const { getDb } = require("../util/database");
+const formatRupiah = require("../util/formatRupiah");
 
 const ObjectId = MongoDb.ObjectID;
 class UserModel {
@@ -53,6 +54,41 @@ class UserModel {
         { _id: new MongoDb.ObjectID(this._id) },
         { $set: { cart: updatedCart } }
       );
+  }
+
+  getCart() {
+    const _db = getDb();
+    const productIds = this.cart.items.map(i => i.productId);
+    return _db
+      .collection("products")
+      .find({
+        _id: {
+          $in: productIds,
+        },
+      })
+      .toArray()
+      .then(products => {
+        const cartItems = products.map(product => {
+          const qty = this.cart.items.find(item => {
+            return item.productId.toString() === product._id.toString();
+          }).quantity;
+          return {
+            ...product,
+            quantity: qty,
+            subTotal: product.price * qty,
+          };
+        });
+
+        const totalPrice = cartItems.reduce((sum, i) => {
+          return sum + +i.price * +i.quantity;
+        }, 0);
+
+        return {
+          cartItems: cartItems,
+          totalPrice: formatRupiah(totalPrice),
+        };
+      })
+      .catch(err => err);
   }
 
   static findById(userId) {
