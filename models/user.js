@@ -73,13 +73,17 @@ class UserModel {
           }).quantity;
           return {
             ...product,
+            price: {
+              unRupiah: +product.price,
+              rupiah: formatRupiah(+product.price),
+            },
             quantity: qty,
-            subTotal: product.price * qty,
+            total: formatRupiah(+product.price * qty),
           };
         });
 
         const totalPrice = cartItems.reduce((sum, i) => {
-          return sum + +i.price * +i.quantity;
+          return sum + +i.price.unRupiah * +i.quantity;
         }, 0);
 
         const totalItems = cartItems.reduce((sum, i) => {
@@ -90,8 +94,8 @@ class UserModel {
           cartItems: cartItems,
           totalItems: totalItems,
           totalPrice: {
-            num: totalPrice,
-            rupiah: formatRupiah(totalPrice),
+            num: +totalPrice,
+            rupiah: formatRupiah(+totalPrice),
           },
         };
       })

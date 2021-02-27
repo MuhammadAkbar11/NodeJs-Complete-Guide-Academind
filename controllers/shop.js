@@ -43,7 +43,6 @@ exports.getCart = (req, res, next) => {
     .getCart()
     .then(result => {
       const { cartItems, totalPrice, totalItems } = result;
-
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
