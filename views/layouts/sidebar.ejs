@@ -1,0 +1,38 @@
+<aside class="phoenix-sidebar">
+  <div class="phx-sidebar-top">
+    <div class="phx-logo">
+      <p class="phx-logo-text">Phoe<span class="text-primary">nix.Com</span></p>
+    </div>
+  </div>
+  <div class="phx-sidebar-nav">
+    <nav class="nav flex-column">
+      <a class="nav-link <%= path === '/' ? 'active': '' %>" href="/">
+        <i data-feather="home" class="mr-2 mt-n1"></i>
+        Home
+      </a>
+      <a
+        class="nav-link <%= path === '/products' ? 'active': '' %>"
+        href="/products"
+      >
+        <i data-feather="list" class="mr-2 mt-n1"></i>
+        Products
+      </a>
+      <a class="nav-link <%= path === '/cart' ? 'active': '' %>" href="/cart">
+        <i data-feather="shopping-cart" class="mr-2 mt-n1"></i>
+        Cart
+      </a>
+      <a
+        class="nav-link <%= path === '/orders' ? 'active': '' %>"
+        href="/orders"
+      >
+        <i data-feather="send" class="mr-2 mt-n1"></i>
+        Orders
+      </a>
+    </nav>
+  </div>
+  <div class="phx-sidebar-bottom">
+    <a class="mx-auto mt-auto mb-3 phx-toggle phx-sidebar-close">
+      <i data-feather="x"></i>
+    </a>
+  </div>
+</aside>

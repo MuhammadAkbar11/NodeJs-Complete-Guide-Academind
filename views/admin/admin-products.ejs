@@ -1,0 +1,87 @@
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
+<%- include('../layouts/sidebar-admin.ejs') %>
+
+<main class="phoenix-main">
+  <div class="container-fluid pb-5">
+    <!-- Title page -->
+    <div class="row">
+      <h5 class="font-weight-bold">
+        <i data-feather="package" class="mt-n1 mr-1"></i>
+        <span class="mt-1">Products</span>
+      </h5>
+    </div>
+
+    <div class="row px-0 mt-3 mt-md-5">
+      <div class="col-lg-11 col-md-12 px-0">
+        <div class="card border bg-transparent shadow pt-2">
+          <div class="card-header bg-transparent border-0">
+            <a href="/admin/add-product" class="btn btn-primary"
+              ><i data-feather="plus"></i> Add new product</a
+            >
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class=" ">
+                  <tr>
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th colspan="2" class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (prods.length > 0) { %> <% let no = 1 %> <% for (const
+                  product of prods) { %>
+                  <tr>
+                    <td><%= no++ %></td>
+                    <td><%= product.title %></td>
+                    <td>
+                      <span class="phx-rupiah"> <%= product.price %> </span>
+                    </td>
+                    <td><%= product.description %></td>
+                    <td>
+                      <img height="70" src="<%= product.imgUrl%>" alt="" />
+                    </td>
+                    <td>
+                      <div class="d-flex flex-nowrap justify-content-center">
+                        <a
+                          href="/admin/edit-product/<%= product._id %>?edit=true"
+                          class="badge bg-primary text-white me-2"
+                        >
+                          <i data-feather="edit"></i>
+                        </a>
+                        <form action="/admin/delete-product" method="POST">
+                          <input
+                            type="hidden"
+                            value="<%= product._id %>"
+                            name="productId"
+                          />
+                          <button
+                            class="badge border border-primary text-primary"
+                            type="submit"
+                          >
+                            <i data-feather="trash-2"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <% } %> <% } else { %>
+                  <tr>
+                    <td colspan="5 " class="text-center">No Product</td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>

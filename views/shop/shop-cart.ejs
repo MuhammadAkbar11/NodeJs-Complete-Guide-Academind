@@ -1,0 +1,145 @@
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
+<%- include('../layouts/sidebar.ejs') %>
+
+<main class="phoenix-main">
+  <div class="container-fluid">
+    <!-- Title page -->
+    <div class="row">
+      <h5 class="font-weight-bold">
+        <i data-feather="shopping-cart" class="mt-n1 mr-1"></i>
+        <span class="mt-1">Cart</span>
+      </h5>
+    </div>
+
+    <div class="row mt-4 mb-5">
+      <div class="col-sm-7 pl-0">
+        <div class="card card-body border-0 rounded-0 bg-transparent pt-0 pl-0">
+          <div class="table-responsive">
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">Products</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">X</th>
+                </tr>
+              </thead>
+              <tbody class="text-black-50">
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+                <% if(products.length > 0) { %> <% products.forEach(prod=> { %>
+                <tr>
+                  <td>
+                    <div class="d-flex">
+                      <div
+                        style="width: 70px; height: 70px"
+                        class="position-relative me-2"
+                      >
+                        <img
+                          class="object-contain"
+                          src="<%= prod.imgUrl
+                    %>"
+                          alt=""
+                        />
+                      </div>
+
+                      <div class="d-flex flex-column ms-2">
+                        <p class="font-weight-bold text-dark">
+                          <%= prod.title %>
+                        </p>
+                        <p class="text-primary">Diskon 0%</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="phx-rupiah"><%= prod.price %> </span>
+                  </td>
+                  <td><%= prod.quantity %></td>
+                  <td>
+                    <form action="/cart-delete-item" method="post">
+                      <input
+                        type="hidden"
+                        value="<%= prod._id %>"
+                        name="productId"
+                      />
+                      <button
+                        class="btn btn-sm btn-danger rounded my-auto"
+                        type="submit"
+                      >
+                        X
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %> <% } else { %>
+                <tr>
+                  <td class="text-center" colspan="4">No Products in Cart</td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5 px-0">
+        <div
+          class="card card-body shadow-sm bg-transparent rounded-0 border-0 px-4"
+        >
+          <h5 class="mt-n1 text-dark">Infomation</h5>
+          <form
+            class="d-flex w-100 flex-column"
+            action="/create-order"
+            method="post"
+          >
+            <div class="form-group mt-2">
+              <label for="" class="text-black-50">Shipping</label>
+              <input
+                type="text"
+                name="address"
+                class="form-control bg-light-gray mt-1"
+                placeholder="Shipping"
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="" class="text-black-50">Coupon</label>
+              <input
+                type="text"
+                class="form-control bg-light-gray mt-1"
+                placeholder="Enter your coupon here"
+              />
+            </div>
+            <div class="mt-4 d-flex justify-content-between">
+              <p class="text-black-50">Total Product</p>
+              <p><%= items %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="text-black-50">Subtotal</p>
+              <p><%= totalPrice.rupiah %></p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="text-black-50">Fee</p>
+              <p>Rp. -</p>
+            </div>
+            <hr class="mt-n1" />
+            <div class="d-flex justify-content-between">
+              <p class="fw-bold">Total</p>
+              <p><%= totalPrice.rupiah %></p>
+            </div>
+            <hr />
+            <div class="d-flex">
+              <button
+                type="submit"
+                class="w-100 btn btn-primary text-white-500"
+              >
+                Checkout
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>

@@ -1,0 +1,9 @@
+<form action="/cart" method="post">
+  <button
+    class="btn btn-primary text-white-500 <%= className %>"
+    type=" submit"
+  >
+    Add to Cart
+  </button>
+  <input type="hidden" name="productId" value="<%= product._id %>" />
+</form>
