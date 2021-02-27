@@ -1,8 +1,10 @@
 @import "./sizes.scss";
 
+.text-nowrap {
+  white-space: nowrap;
+}
+
 .object-cover {
-  height: 100%;
-  width: 100%;
   object-fit: cover;
 }
 .object-contain {
