@@ -1,6 +1,6 @@
 {
-  "name": "bagian-11-working-with-nosql-and-using-mongodb",
-  "version": "1.0.1",
+  "name": "bagian-12-working-with-mongoose",
+  "version": "1.0.2",
   "description": "Tutorial Bagian 11 MongoDB",
   "main": "app.js",
   "scripts": {
