@@ -104,6 +104,32 @@ class UserModel {
       );
   }
 
+  addOrder(address, totalPrice) {
+    const _db = getDb();
+
+    return _db
+      .collection("orders")
+      .insertOne({
+        userId: MongoDb.ObjectID(this._id),
+        cart: this.cart,
+        shipping: {
+          address: address,
+          zip: "27859",
+        },
+        totalPrice: totalPrice,
+        creatAt: new Date(),
+      })
+      .then(result => {
+        this.cart = { items: [] };
+        return _db
+          .collection("users")
+          .updateOne(
+            { _id: new MongoDb.ObjectID(this._id) },
+            { $set: { cart: { items: [] } } }
+          );
+      });
+  }
+
   static findById(userId) {
     const _db = getDb();
 

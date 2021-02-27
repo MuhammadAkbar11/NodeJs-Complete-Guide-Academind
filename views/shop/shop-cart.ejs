@@ -92,6 +92,7 @@
             action="/create-order"
             method="post"
           >
+            <input type="hidden" name="totalPrice" value="<%= totalPrice %>" />
             <div class="form-group mt-2">
               <label for="" class="text-black-50">Shipping</label>
               <input

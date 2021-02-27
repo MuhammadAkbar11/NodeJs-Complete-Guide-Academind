@@ -88,36 +88,21 @@ exports.postCartDeleteProduct = (req, res, next) => {
 //   });
 // };
 
-// exports.postOrder = (req, res, next) => {
-//   const address = req.body.address;
-//   let fetchCart;
-//   req.user
-//     .getCart()
-//     .then(cart => {
-//       fetchCart = cart;
-//       return cart.getProducts();
-//     })
-//     .then(products => {
-//       return req.user
-//         .createOrder({ address: address })
-//         .then(order => {
-//           return order.addProduct(
-//             products.map(product => {
-//               product.orderItem = {
-//                 quantity: product.cartItem.quantity,
-//               };
-//               return product;
-//             })
-//           );
-//         })
-//         .catch(err => console.log(err));
-//     })
-//     .then(err => fetchCart.setProducts(null))
-//     .then(result => {
-//       res.redirect("/orders");
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.postOrder = (req, res, next) => {
+  let address = req.body.address;
+  const totalPrice = req.body.totalPrice;
+
+  if (address === "") {
+    address = "Bekasi";
+  }
+
+  req.user
+    .addOrder(address, totalPrice)
+    .then(result => {
+      res.redirect("/orders");
+    })
+    .catch(err => console.log(err));
+};
 
 // exports.getOrders = (req, res, next) => {
 //   req.user
