@@ -20,9 +20,7 @@ class Product {
         description: this.description,
         imgUrl: this.imgUrl,
       })
-      .then(res => {
-        console.log(res);
-      })
+      .then(res => res)
       .catch(err => console.log(err));
   }
 

@@ -79,13 +79,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.getCheckout = (req, res, next) => {
-  res.render("shop/checkout", {
-    pageTitle: "Checkout | phoenix.com",
-    path: "/checkout",
-  });
-};
-
 exports.postOrder = (req, res, next) => {
   let address = req.body.address;
 

@@ -31,14 +31,7 @@ exports.getEditProduct = (req, res, next) => {
   }
 
   const prodId = req.params.productId;
-  // req.user
-  //   .getProducts({
-  //     where: {
-  //       id_product: prodId,
-  //     },
-  //   })
   Product.findById(prodId).then(product => {
-    console.log(product);
     if (!product) {
       return res.redirect("/admin/product");
     }
@@ -66,15 +59,6 @@ exports.postEditProducts = (req, res, next) => {
     updatedImageUrl
   );
   ProductM.update(prodId)
-    // .catch(err => console.log(err));
-    // Product.findByPk(prodId)
-    //   .then(product => {
-    //     product.title_product = updatedTitle;
-    //     product.price_product = updatedPrice;
-    //     product.desc_product = updatedDescription;
-    //     product.imgUrl_product = updatedImageUrl;
-    //     return product.save();
-    //   })
     .then(result => {
       res.redirect("/admin/products");
     })
