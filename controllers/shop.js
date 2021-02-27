@@ -96,16 +96,16 @@ exports.postOrder = (req, res, next) => {
   req.user
     .addOrder(address)
     .then(result => {
-      res.redirect("/cart");
+      res.redirect("/orders");
     })
     .catch(err => console.log(err));
 };
 
 exports.getOrders = (req, res, next) => {
   req.user
-    .getOrders({ include: ["products"] })
+    .getOrders()
     .then(orders => {
-      res.render("shop/shop-orders", {
+      return res.render("shop/shop-orders", {
         pageTitle: "My Orders | phoenix.com",
         path: "/orders",
         orders: orders,

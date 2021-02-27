@@ -1,75 +1,86 @@
-<%- include('../layouts/head.ejs') %>
-<%- include('../layouts/header.ejs') %>
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
 <%- include('../layouts/sidebar.ejs') %>
 
 <main class="phoenix-main">
-    <div class="container-fluid">
-        <!-- Title page -->
-        <div class="row">
-            <h5 class="font-weight-bold">
-                <i data-feather="send" class="mt-n1 mr-1"></i>
-                <span class="mt-1">My Orders</span>
-            </h5>
-        </div>
-        <div class="ro mt-4">
-            <div class="col-md-12">
-                <div class="card bg-transparent border-0 ">
-                    <div class="table-responsive">
-                        <table class="table table-borderless table-hover">
-                            <thead class=" text-black-50 border-bottom ">
-                                <tr>
-                                    <th scope="col">No Order</th>
-                                    <th scope="col" colspan="2">Items</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Actions</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (orders.length > 0) { %>
-                                <% orders.forEach(order => {  %>
-                                <tr class="border-bottom">
-                                    <th scope="row"> #<%= order.id_order %> </th>
-                                    <td colspan="2">
-
-                                        <% order.products.forEach(product => {%>
-                                        <div class="d-flex ">
-                                            <img height="70" src="<%= product.imgUrl_product %>" alt="">
-                                            <div class="d-flex flex-column justify-content-center ml-2">
-                                                <p class=" font-weight-bold" style="white-space: nowrap;">
-                                                    <%= product.title_product %>
-                                                    <span class="text-primary">
-                                                        (<%= product.orderItem.quantity %>)
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <% });  %>
-                                    </td>
-                                    <td>-</td>
-                                    <td><%= order.address %> </td>
-                                    <td>
-                                        <a href="#" class="badge badge-danger">Cancel</a>
-                                    </td>
-                                </tr>
-
-                                <% }) %>
-                                <% } else { %>
-                                <tr>
-                                    <td colspan="7" class="text-center text-dark">
-                                        No orders here!
-                                    </td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <!-- Title page -->
+    <div class="row">
+      <h5 class="font-weight-bold">
+        <i data-feather="send" class="mt-n1 mr-1"></i>
+        <span class="mt-1">My Orders</span>
+      </h5>
     </div>
+    <div class="ro mt-4">
+      <div class="col-md-12">
+        <div class="card bg-transparent border-0">
+          <div class="table-responsive">
+            <table class="table table-borderless table-hover">
+              <thead class="text-black-50 border-bottom">
+                <tr>
+                  <th scope="col">No Order</th>
+                  <th scope="col" colspan="2">Items</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (orders.length > 0) { %> <% orders.forEach(order => { %>
+                <tr class="border-bottom">
+                  <th scope="row">#<%= order.id_order %></th>
+                  <td colspan="2">
+                    <% order.cart?.cartItems.forEach(product => {%>
+                    <div class="d-flex">
+                      <div
+                        style="width: 50px; height: 50px"
+                        class="position-relative me-2"
+                      >
+                        <img
+                          class="object-contain"
+                          src="<%= product.imgUrl
+                    %>"
+                          alt=""
+                        />
+                      </div>
+                      <div
+                        class="d-flex flex-column justify-content-center ml-2"
+                      >
+                        <small
+                          class="text-black-50"
+                          style="white-space: nowrap"
+                        >
+                          <%= product.title %>
+                          <span class="text-primary">
+                            (x<%= product.quantity %>)
+                          </span>
+                        </small>
+                      </div>
+                    </div>
+                    <% }); %>
+                  </td>
+                  <td><%= order.total %></td>
+                  <td><%= order.shipping?.address %></td>
+                  <td>
+                    <a href="#" class="btn btn-primary btn-sm text-white"
+                      >Cancel</a
+                    >
+                  </td>
+                </tr>
+
+                <% }) %> <% } else { %>
+                <tr>
+                  <td colspan="7" class="text-center text-dark">
+                    No orders here!
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>

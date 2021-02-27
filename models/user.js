@@ -111,8 +111,6 @@ class UserModel {
     const _db = getDb();
 
     return this.getCart().then(cart => {
-      console.log(cart);
-
       const order = {
         user: {
           userId: MongoDb.ObjectID(this._id),
@@ -142,7 +140,17 @@ class UserModel {
     });
   }
 
-  getOrders() {}
+  getOrders() {
+    const _db = getDb();
+    return _db
+      .collection("orders")
+      .find({ "user.userId": new MongoDb.ObjectID(this._id) })
+      .toArray()
+      .then(result => {
+        return result;
+      })
+      .catch(err => err);
+  }
 
   static findById(userId) {
     const _db = getDb();
