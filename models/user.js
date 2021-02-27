@@ -47,7 +47,6 @@ class UserModel {
     };
 
     const _db = getDb();
-
     return _db
       .collection("users")
       .updateOne(
@@ -89,6 +88,20 @@ class UserModel {
         };
       })
       .catch(err => err);
+  }
+
+  deleteItemsFromCart(productId) {
+    const updatedCartItems = this.cart.items.filter(item => {
+      return item.productId.toString() !== productId.toString();
+    });
+
+    const _db = getDb();
+    return _db
+      .collection("users")
+      .updateOne(
+        { _id: new MongoDb.ObjectID(this._id) },
+        { $set: { cart: { items: updatedCartItems } } }
+      );
   }
 
   static findById(userId) {
