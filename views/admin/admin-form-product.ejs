@@ -62,7 +62,7 @@
                             name="price"
                             id="price"
                             step="0.01"
-                            value="<% if (editing) { %><%= product.price %><% } %>"
+                            value="<% if (editing) { %><%= product.price.num %><% } %>"
                           />
                         </div>
                       </div>
@@ -80,7 +80,7 @@
                             class="form-control form-control-lg bg-transparent"
                             name="imageUrl"
                             id="imageUrl"
-                            value="<% if (editing) { %><%= product.imgUrl %><% } %>"
+                            value="<% if (editing) { %><%= product.imageUrl %><% } %>"
                           />
                         </div>
                       </div>
