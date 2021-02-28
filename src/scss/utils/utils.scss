@@ -1,5 +1,9 @@
 @import "./sizes.scss";
 
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
 .text-nowrap {
   white-space: nowrap;
 }

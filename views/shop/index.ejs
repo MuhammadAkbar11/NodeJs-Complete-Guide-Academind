@@ -45,7 +45,9 @@
             <span class="text-primary phx-rupiah mb-2"
               ><%= product.price.rupiah %></span
             >
-            <p style="font-size: small"><%= product.description %></p>
+            <p class="overflow-hidden w-100 text-nowrap text-ellipsis">
+              <%= product.description %>
+            </p>
             <!-- <a href="" class="btn btn-primary mt-auto">Add To Cart</a> -->
             <div class="mt-auto">
               <%- include('../includes/add-to-cart.ejs', {product: product,
