@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 // eslint-disable-nMongoDBConnect
 app.use((req, res, next) => {
-  UserModel.findById("603ba81f330eba50ae4f7bb4")
+  UserModel.findById("603ba9308b492851e444517b")
     .then(user => {
       req.user = user;
       next();
