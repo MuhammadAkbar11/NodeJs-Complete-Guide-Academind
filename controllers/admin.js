@@ -1,6 +1,18 @@
 const ProductModel = require("../models/productModel");
 const formatRupiah = require("../util/formatRupiah");
 
+exports.getProducts = (req, res, next) => {
+  ProductModel.find()
+    .then(products => {
+      res.render("admin/admin-products", {
+        prods: products,
+        pageTitle: "Admin - Products | phoenix.com  💌  ",
+        path: "/admin/products",
+      });
+    })
+    .catch(err => console.log(err));
+};
+
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/admin-form-product", {
     pageTitle: "Admin - Add Products | phoenix.com",
@@ -36,55 +48,59 @@ exports.postAddProducts = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getEditProduct = (req, res, next) => {
-//   const editMode = req.query.edit;
-//   if (!editMode) {
-//     return res.redirect("/admin/admin-products");
-//   }
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect("/admin/admin-products");
+  }
 
-//   const prodId = req.params.productId;
-//   Product.findById(prodId).then(product => {
-//     if (!product) {
-//       return res.redirect("/admin/product");
-//     }
-//     res.render("admin/admin-form-product", {
-//       pageTitle: "Admin - Edit Product | phoenix.com ",
-//       path: "/admin/edit-product",
-//       editing: editMode,
-//       product: product,
-//     });
-//   });
-// };
+  const prodId = req.params.productId;
+  ProductModel.findById(prodId).then(product => {
+    if (!product) {
+      return res.redirect("/admin/product");
+    }
+    res.render("admin/admin-form-product", {
+      pageTitle: "Admin - Edit Product | phoenix.com ",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+    });
+  });
+};
 
-// exports.postEditProducts = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   const updatedTitle = req.body.title;
-//   const updatedPrice = req.body.price;
-//   const updatedImageUrl = req.body.imageUrl;
-//   const updatedDescription = req.body.description;
+exports.postEditProducts = (req, res, next) => {
+  const prodId = req.body.productId;
+  const inputTitle = req.body.title;
+  const inputPrice = +req.body.price;
+  const inputImageUrl = req.body.imageUrl;
+  const inputDescription = req.body.description;
 
-//   const ProductM = new Product(
-//     prodId,
-//     updatedTitle,
-//     updatedPrice,
-//     updatedDescription,
-//     updatedImageUrl
-//   );
-//   ProductM.update(prodId)
-//     .then(result => {
-//       res.redirect("/admin/products");
-//     })
-//     .catch(err => console.log(err));
-// };
+  ProductModel.findById(prodId)
+    .then(product => {
+      const updatedData = {
+        title: inputTitle,
+        price: {
+          num: inputPrice,
+          rupiah: formatRupiah(inputPrice),
+        },
+        description: inputDescription,
+        imageUrl: inputImageUrl,
+      };
 
-exports.getProducts = (req, res, next) => {
-  ProductModel.find()
-    .then(products => {
-      res.render("admin/admin-products", {
-        prods: products,
-        pageTitle: "Admin - Products | phoenix.com  💌  ",
-        path: "/admin/products",
-      });
+      return product.update(
+        {
+          $set: { ...updatedData },
+          $currentDate: {
+            updateAt: {
+              $type: "date",
+            },
+          },
+        },
+        { upsert: true }
+      );
+    })
+    .then(result => {s
+      res.redirect("/admin/products");
     })
     .catch(err => console.log(err));
 };

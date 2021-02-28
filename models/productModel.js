@@ -25,6 +25,9 @@ const productSchema = new Schema({
   createdAt: {
     type: Date,
   },
+  updateAt: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("ProductModel", productSchema, "products");
