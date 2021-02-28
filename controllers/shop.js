@@ -1,4 +1,6 @@
 const ProductModel = require("../models/productModel");
+const OrderModel = require("../models/orderModel");
+
 const formatRupiah = require("../util/formatRupiah");
 
 exports.getProducts = (req, res, next) => {
@@ -60,9 +62,7 @@ exports.getCart = (req, res, next) => {
       const totalItems = cart.items.reduce((sum, i) => {
         return sum + +i.quantity;
       }, 0);
-      // const { cartItems, totalPrice, totalItems } = result;
 
-      console.log(products);
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
@@ -90,8 +90,6 @@ exports.postCart = (req, res, next) => {
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
 
-  console.log(prodId);
-
   req.user
     .removeFromCart(prodId)
     .then(result => {
@@ -101,14 +99,52 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  let address = req.body.address;
-
-  if (address === "") {
-    address = "Bekasi";
-  }
+  const shippingMethod = req.body.method;
 
   req.user
-    .addOrder(address)
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then(user => {
+      const { cart } = user;
+      const products = cart.items.map(item => {
+        return {
+          product: item._doc.productId,
+          quantity: item.quantity,
+          subtotal: {
+            num: item.total,
+            rupiah: formatRupiah(item.total),
+          },
+        };
+      });
+      const getTotalPrice = cart.items.reduce((sum, i) => {
+        return sum + +i.productId.price.num * +i.quantity;
+      }, 0);
+
+      const totalPrice = {
+        num: getTotalPrice,
+        rupiah: formatRupiah(getTotalPrice),
+      };
+
+      const orderModel = new OrderModel({
+        user: {
+          name: req.user.name,
+          userId: req.user,
+        },
+        products: products,
+        shipping: {
+          method: shippingMethod,
+          address: {
+            street: "jln Sudirman, No 45",
+            city: "Jakarta",
+            zip: "254546",
+          },
+        },
+        createdAt: new Date(),
+        total: totalPrice,
+      });
+
+      return orderModel.save();
+    })
     .then(result => {
       res.redirect("/orders");
     })
