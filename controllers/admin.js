@@ -87,7 +87,7 @@ exports.postEditProducts = (req, res, next) => {
         imageUrl: inputImageUrl,
       };
 
-      return product.update(
+      return product.updateOne(
         {
           $set: { ...updatedData },
           $currentDate: {
@@ -99,21 +99,21 @@ exports.postEditProducts = (req, res, next) => {
         { upsert: true }
       );
     })
-    .then(result => {s
+    .then(result => {
       res.redirect("/admin/products");
     })
     .catch(err => console.log(err));
 };
 
-// exports.postDeleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
+exports.postDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
 
-//   Product.deleteById(prodId)
-//     .then(() => {
-//       res.redirect("/admin/products");
-//     })
-//     .catch(err => console.log(err));
-// };
+  ProductModel.findByIdAndRemove(prodId)
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch(err => console.log(err));
+};
 
 // // basic page
 
