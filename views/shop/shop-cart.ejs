@@ -54,14 +54,14 @@
                         <div class="flex flex-row mt-auto">
                           <form action="/cart-delete-item" method="post">
                             <a
-                              href="/cart-update-item/<%= prod._id %>"
+                              href="/cart-update-item/<%= prod.productId._id %>"
                               class="btn btn-sm ps-0 btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto"
                             >
                               Edit
                             </a>
                             <input
                               type="hidden"
-                              value="<%= prod._id %>"
+                              value="<%= prod.productId._id %>"
                               name="productId"
                             />
                             <button
