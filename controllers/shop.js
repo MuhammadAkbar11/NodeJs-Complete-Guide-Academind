@@ -1,4 +1,5 @@
 const ProductModel = require("../models/productModel");
+const formatRupiah = require("../util/formatRupiah");
 
 exports.getProducts = (req, res, next) => {
   ProductModel.find()
@@ -40,13 +41,32 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()
-    .then(result => {
-      const { cartItems, totalPrice, totalItems } = result;
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then(user => {
+      const { cart } = user;
+      const products = cart.items.map(item => {
+        return { ...item._doc, total: formatRupiah(item.total) };
+      });
+      const getTotalPrice = cart.items.reduce((sum, i) => {
+        return sum + +i.productId.price.num * +i.quantity;
+      }, 0);
+
+      const totalPrice = {
+        num: getTotalPrice,
+        rupiah: formatRupiah(getTotalPrice),
+      };
+
+      const totalItems = cart.items.reduce((sum, i) => {
+        return sum + +i.quantity;
+      }, 0);
+      // const { cartItems, totalPrice, totalItems } = result;
+
+      console.log(products);
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
-        products: cartItems,
+        products: products,
         items: totalItems,
         totalPrice: totalPrice,
       });
