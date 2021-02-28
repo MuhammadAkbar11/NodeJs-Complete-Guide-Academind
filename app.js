@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const errorController = require("./controllers/error");
+const UserModel = require("./models/userModel");
 
 const app = express();
 
@@ -19,14 +20,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
 // eslint-disable-nMongoDBConnect
-// app.use((req, res, next) => {
-//   UserModel.findById("6038aa625ed7c15820af6a2d")
-//     .then(user => {
-//       req.user = new UserModel(user.username, user.email, user._id, user.cart);
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  UserModel.findById("603ba81f330eba50ae4f7bb4")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -34,12 +35,25 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 // eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 1996;
+const PORT = process.env.PORT || 3000;
 const URL = process.env.URL;
 
 mongoose
   .connect(URL)
   .then(result => {
+    UserModel.findOne().then(user => {
+      if (!user) {
+        const user = new UserModel({
+          name: "D U B U",
+          email: "dubu@gmail.com",
+          cart: {
+            items: [],
+          },
+        });
+        user.save();
+      }
+    });
+
     app.listen(PORT, () => {
       console.log("listening... PORT " + PORT);
     });
