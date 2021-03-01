@@ -100,9 +100,23 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = async (req, res, next) => {
-  const shippingMethod = req.body.method;
+  const shippingMethod = req.body.method.trim();
 
   const getOrderNumber = await IncNumbersModel.findOne();
+
+  let shippingMothodPrice = 7000;
+
+  switch (shippingMethod) {
+    case "fast":
+      shippingMothodPrice = 15000;
+      break;
+    case "express":
+      shippingMothodPrice = 25000;
+      break;
+    default:
+      shippingMothodPrice = 7000;
+      break;
+  }
 
   req.user
     .populate("cart.items.productId")
@@ -124,8 +138,8 @@ exports.postOrder = async (req, res, next) => {
       }, 0);
 
       const totalPrice = {
-        num: getTotalPrice,
-        rupiah: formatRupiah(getTotalPrice),
+        num: getTotalPrice + +shippingMothodPrice,
+        rupiah: formatRupiah(getTotalPrice + +shippingMothodPrice),
       };
 
       const orderModel = new OrderModel({
