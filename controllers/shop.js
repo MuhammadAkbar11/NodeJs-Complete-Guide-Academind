@@ -1,5 +1,6 @@
 const ProductModel = require("../models/productModel");
 const OrderModel = require("../models/orderModel");
+const IncNumbersModel = require("../models/incNumbers");
 
 const formatRupiah = require("../util/formatRupiah");
 
@@ -98,8 +99,10 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.postOrder = (req, res, next) => {
+exports.postOrder = async (req, res, next) => {
   const shippingMethod = req.body.method;
+
+  const getOrderNumber = await IncNumbersModel.findOne();
 
   req.user
     .populate("cart.items.productId")
@@ -126,6 +129,7 @@ exports.postOrder = (req, res, next) => {
       };
 
       const orderModel = new OrderModel({
+        orderNumber: `ORDER-${getOrderNumber.orderNumber}`,
         user: {
           name: req.user.name,
           userId: req.user,
@@ -146,6 +150,16 @@ exports.postOrder = (req, res, next) => {
       return orderModel.save();
     })
     .then(() => {
+      return IncNumbersModel.updateOne(
+        {},
+        {
+          $inc: {
+            orderNumber: 1,
+          },
+        }
+      );
+    })
+    .then(() => {
       return req.user.clearCart();
     })
     .then(() => {
@@ -155,8 +169,9 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
+  OrderModel.find({
+    "user.userId": req.user._id,
+  })
     .then(orders => {
       return res.render("shop/shop-orders", {
         pageTitle: "My Orders | phoenix.com",

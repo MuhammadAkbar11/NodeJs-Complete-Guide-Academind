@@ -20,24 +20,24 @@
                   <th scope="col">No Order</th>
                   <th scope="col" colspan="2">Items</th>
                   <th scope="col">Price</th>
-                  <th scope="col">Address</th>
+                  <th scope="col">Dilevery</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <% if (orders.length > 0) { %> <% orders.forEach(order => { %>
                 <tr class="border-bottom">
-                  <th scope="row">#<%= order.id_order %></th>
+                  <th scope="row"><%= order.orderNumber %></th>
                   <td colspan="2">
-                    <% order.cart?.cartItems.forEach(product => {%>
-                    <div class="d-flex">
+                    <% order.products.forEach(p=> {%>
+                    <div class="d-flex mb-5">
                       <div
                         style="width: 50px; height: 50px"
                         class="position-relative me-2"
                       >
                         <img
-                          class="object-contain"
-                          src="<%= product.imgUrl
+                          class="object-cover w-100"
+                          src="<%= p.product.imageUrl
                     %>"
                           alt=""
                         />
@@ -49,17 +49,17 @@
                           class="text-black-50"
                           style="white-space: nowrap"
                         >
-                          <%= product.title %>
+                          <%= p.product.title %>
                           <span class="text-primary">
-                            (x<%= product.quantity %>)
+                            (x<%= p.quantity %>)
                           </span>
                         </small>
                       </div>
                     </div>
                     <% }); %>
                   </td>
-                  <td><%= order.total %></td>
-                  <td><%= order.shipping?.address %></td>
+                  <td><%= order.total.rupiah %></td>
+                  <td class="text-capitalize"><%= order.shipping?.method %></td>
                   <td>
                     <a href="#" class="btn btn-primary btn-sm text-white"
                       >Cancel</a
