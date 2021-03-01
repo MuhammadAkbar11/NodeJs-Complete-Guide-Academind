@@ -7,26 +7,33 @@
   <div class="phx-sidebar-nav">
     <nav class="nav flex-column">
       <a class="nav-link <%= path === '/' ? 'active': '' %>" href="/">
-        <i data-feather="home" class="mr-2 mt-n1"></i>
+        <i data-feather="home" class="me-2 mt-n1"></i>
         Home
       </a>
       <a
         class="nav-link <%= path === '/products' ? 'active': '' %>"
         href="/products"
       >
-        <i data-feather="list" class="mr-2 mt-n1"></i>
+        <i data-feather="list" class="me-2 mt-n1"></i>
         Products
       </a>
       <a class="nav-link <%= path === '/cart' ? 'active': '' %>" href="/cart">
-        <i data-feather="shopping-cart" class="mr-2 mt-n1"></i>
+        <i data-feather="shopping-cart" class="me-2 mt-n1"></i>
         Cart
       </a>
       <a
         class="nav-link <%= path === '/orders' ? 'active': '' %>"
         href="/orders"
       >
-        <i data-feather="send" class="mr-2 mt-n1"></i>
+        <i data-feather="send" class="me-2 mt-n1"></i>
         Orders
+      </a>
+      <a
+        class="nav-link <%= path === '/orders' ? 'active': '' %>"
+        href="/login"
+      >
+        <i data-feather="log-in" class="me-2 mt-n1"></i>
+        Login
       </a>
     </nav>
   </div>
