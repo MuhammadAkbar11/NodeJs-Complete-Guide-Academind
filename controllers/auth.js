@@ -45,7 +45,38 @@ exports.getSignUp = (req, res) => {
   });
 };
 
-exports.postSignUp = (req, res) => {};
+exports.postSignUp = (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.password2;
+
+  UserModel.findOne({
+    email: email,
+  })
+    .then(userDoc => {
+      if (userDoc) {
+        return res.redirect("/signup");
+      }
+      const user = new UserModel({
+        name: name,
+        email: email,
+        password: password,
+        cart: { items: [] },
+      });
+
+      return user.save();
+    })
+    .then(result => {
+      res.redirect("/login");
+    })
+    .catch(err => {
+      if (err) {
+        console.log(err);
+        res.redirect("/signup");
+      }
+    });
+};
 
 exports.logout = (req, res) => {
   req.session.destroy(err => {

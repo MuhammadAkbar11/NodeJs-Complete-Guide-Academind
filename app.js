@@ -66,19 +66,6 @@ const PORT = process.env.PORT || 3000;
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    UserModel.findOne().then(user => {
-      if (!user) {
-        const user = new UserModel({
-          name: "D U B U",
-          email: "dubu@gmail.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
-
     app.listen(PORT, () => {
       console.log("listening... PORT " + PORT);
     });
