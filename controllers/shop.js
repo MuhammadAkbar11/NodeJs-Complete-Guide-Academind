@@ -33,9 +33,6 @@ exports.getDetailProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  const isLoggendIn = req.get("Cookie").split(";")[1].split("=")[1];
-
-  console.log(isLoggendIn);
   ProductModel.find()
     .then(products => {
       res.render("shop/index", {
