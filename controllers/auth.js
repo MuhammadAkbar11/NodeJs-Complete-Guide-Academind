@@ -80,6 +80,7 @@ exports.postSignUp = (req, res) => {
           name: name,
           email: email,
           password: hashedPw,
+          role: "user",
           cart: { items: [] },
         });
         return user.save();
