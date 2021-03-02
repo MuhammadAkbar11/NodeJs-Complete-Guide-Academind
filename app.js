@@ -39,6 +39,10 @@ app.use(
 );
 
 app.use((req, res, next) => {
+  if (req.session.user) {
+    return next();
+  }
+
   UserModel.find({
     email: req.session?.user?.email,
   })
