@@ -39,11 +39,12 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  // const isLoggendIn = req.get("Cookie").split(";")[1].split("=")[1];
-  UserModel.findById("603ba9308b492851e444517b")
+  UserModel.find({
+    email: req.session?.user?.email,
+  })
     .then(user => {
-      req.user = user;
-      // req.isLoggendIn = isLoggendIn;
+      console.log(user);
+      req.user = user[0];
       next();
     })
     .catch(err => console.log(err));
