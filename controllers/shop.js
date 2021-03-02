@@ -143,7 +143,7 @@ exports.postOrder = async (req, res, next) => {
       const orderModel = new OrderModel({
         orderNumber: `ORDER-${getOrderNumber.orderNumber}`,
         user: {
-          name: req.user.name,
+          name: req.user.email,
           userId: req.user,
         },
         products: products,
@@ -155,6 +155,7 @@ exports.postOrder = async (req, res, next) => {
             zip: "254546",
           },
         },
+        status: "process",
         createdAt: new Date(),
         total: totalPrice,
       });

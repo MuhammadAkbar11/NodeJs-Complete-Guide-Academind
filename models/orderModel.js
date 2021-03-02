@@ -60,6 +60,10 @@ const orderSchema = new Schema({
       },
     },
   },
+  status: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     required: true,
