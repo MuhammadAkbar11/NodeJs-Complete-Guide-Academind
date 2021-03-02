@@ -22,9 +22,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 // eslint-disable-nMongoDBConnect
 app.use((req, res, next) => {
+  const isLoggendIn = req.get("Cookie").split(";")[1].split("=")[1];
   UserModel.findById("603ba9308b492851e444517b")
     .then(user => {
       req.user = user;
+      req.isLoggendIn = isLoggendIn;
       next();
     })
     .catch(err => console.log(err));

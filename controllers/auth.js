@@ -6,6 +6,9 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res) => {
-  req.isLoggendIn = true;
+  // req.isLoggendIn = true;
+  let reqEmail = "dubu@gmail.com";
+
+  res.setHeader("Set-Cookie", [`email=${reqEmail}`, "isLoggendIn=true"]);
   res.redirect("/");
 };
