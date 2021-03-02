@@ -1,6 +1,6 @@
 {
-  "name": "bagian_13__sessions-and-cookies",
-  "version": "1.0.3",
+  "name": "bagian_14__adding-authentication",
+  "version": "1.0.4",
   "description": "Tutorial Bagian 11 MongoDB",
   "main": "app.js",
   "scripts": {
