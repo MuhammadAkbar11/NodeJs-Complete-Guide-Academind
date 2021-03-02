@@ -54,9 +54,15 @@
               <%= product.description %>
             </p>
             <!-- <a href="" class="btn btn-primary mt-auto">Add To Cart</a> -->
-            <div class="mt-auto">
-              <%- include('../includes/add-to-cart.ejs', {product: product,
-              className: "mt-auto"}) %>
+            <div class="mt-auto d-flex mt-auto justify-content-between">
+              <% if (isAuthenticated) { %> <%-
+              include('../includes/add-to-cart.ejs', {product: product,
+              className: "mt-auto"}) %> <% } %>
+              <a
+                href="/products/<%= product._id %>"
+                class="btn btn-outline-primary text-white-500-hover"
+                >Detail</a
+              >
             </div>
           </div>
         </div>

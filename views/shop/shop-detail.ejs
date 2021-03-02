@@ -45,6 +45,7 @@
                 </p>
 
                 <div>
+                  <% if (isAuthenticated) { %>
                   <form action="/cart" method="post">
                     <button
                       class="btn btn-primary text-white-500 mt-2 mt-md-4 mb-5 px-4"
@@ -58,6 +59,7 @@
                       value="<%= product._id %>"
                     />
                   </form>
+                  <% } %>
                 </div>
 
                 <div class="mt-auto">

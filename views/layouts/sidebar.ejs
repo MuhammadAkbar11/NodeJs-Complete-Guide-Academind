@@ -29,11 +29,16 @@
         <i data-feather="send" class="me-2 mt-n1"></i>
         Orders
       </a>
-      <% } %>
+      <a class="nav-link" href="/logout">
+        <i data-feather="log-out" class="me-2 mt-n1"></i>
+        Logut
+      </a>
+      <% } else { %>
       <a class="nav-link <%= path === '/login' ? 'active': '' %>" href="/login">
         <i data-feather="log-in" class="me-2 mt-n1"></i>
         Login
       </a>
+      <% } %>
     </nav>
   </div>
   <div class="phx-sidebar-bottom">

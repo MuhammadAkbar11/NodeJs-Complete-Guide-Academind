@@ -35,8 +35,9 @@
               <%= product.description %>
             </p>
             <div class="d-flex mt-auto justify-content-between">
-              <%- include('../includes/add-to-cart.ejs', {product: product,
-              className: "mt-auto"}) %>
+              <% if (isAuthenticated) { %> <%-
+              include('../includes/add-to-cart.ejs', {product: product,
+              className: "mt-auto"}) %> <% } %>
               <a
                 href="/products/<%= product._id %>"
                 class="btn btn-outline-primary text-white-500-hover"
