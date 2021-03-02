@@ -1,6 +1,9 @@
 const UserModel = require("../models/userModel");
 
 exports.getLogin = (req, res, next) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   res.render("auth/login", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
@@ -8,7 +11,10 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res) => {
-  // req.isLoggendIn = true;
+  if (req.user) {
+    return res.redirect("/");
+  }
+
   const reqEmail = "dubu@gmail.com";
 
   UserModel.find({
@@ -17,7 +23,13 @@ exports.postLogin = (req, res) => {
     .then(user => {
       req.session.isLoggedIn = true;
       req.session.user = user[0];
-      res.redirect("/");
+      req.session.save(err => {
+        if (err) {
+          return res.redirect("/login");
+        }
+
+        return res.redirect("/login");
+      });
     })
     .catch(err => console.log(err));
 };
