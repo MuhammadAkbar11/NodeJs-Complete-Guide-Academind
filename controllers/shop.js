@@ -46,10 +46,6 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-
   req.user
     .populate("cart.items.productId")
     .execPopulate()
@@ -85,9 +81,6 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  if (!req.user) {
-    return res.redirect("/login");
-  }
   ProductModel.findById(prodId)
     .then(product => {
       return req.user.addToCart(product);
@@ -100,9 +93,6 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  if (!req.user) {
-    return res.redirect("/login");
-  }
   req.user
     .removeFromCart(prodId)
     .then(result => {
@@ -112,10 +102,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = async (req, res, next) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-
   const shippingMethod = req.body.method.trim();
 
   const getOrderNumber = await IncNumbersModel.findOne();
@@ -199,10 +185,6 @@ exports.postOrder = async (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-
   OrderModel.find({
     "user.userId": req.user._id,
   })
