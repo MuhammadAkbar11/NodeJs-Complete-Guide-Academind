@@ -17,21 +17,36 @@ exports.postLogin = (req, res) => {
     return res.redirect("/");
   }
 
-  const reqEmail = "dubu@gmail.com";
+  const email = req.body.email;
+  const password = req.body.password;
 
-  UserModel.find({
-    email: reqEmail.trim(),
+  UserModel.findOne({
+    email: email,
   })
     .then(user => {
-      req.session.isLoggedIn = true;
-      req.session.user = user[0];
-      req.session.save(err => {
-        if (err) {
-          return res.redirect("/login");
-        }
-
+      console.log(user);
+      if (!user) {
         return res.redirect("/login");
-      });
+      }
+
+      return bcrypt
+        .compare(password, user.password)
+        .then(doMatch => {
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            return req.session.save(err => {
+              if (err) {
+                res.redirect("/login");
+              }
+              res.redirect("/");
+            });
+          }
+          res.redirect("/login");
+        })
+        .catch(err => {
+          err && res.redirect("/login");
+        });
     })
     .catch(err => console.log(err));
 };
@@ -60,17 +75,15 @@ exports.postSignUp = (req, res) => {
       if (userDoc) {
         return res.redirect("/signup");
       }
-      return bcrypt.hash(password, 12);
-    })
-    .then(hashedPw => {
-      const user = new UserModel({
-        name: name,
-        email: email,
-        password: hashedPw,
-        cart: { items: [] },
+      return bcrypt.hash(password, 12).then(hashedPw => {
+        const user = new UserModel({
+          name: name,
+          email: email,
+          password: hashedPw,
+          cart: { items: [] },
+        });
+        return user.save();
       });
-
-      return user.save();
     })
     .then(result => {
       res.redirect("/login");
