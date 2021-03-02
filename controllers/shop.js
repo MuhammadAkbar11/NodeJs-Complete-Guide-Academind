@@ -11,6 +11,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: "All Products | phoenix.com",
         path: "/products",
+        isAuthenticated: req.isLoggendIn,
       });
     })
     .catch(err => console.log(err));
@@ -25,6 +26,7 @@ exports.getDetailProduct = (req, res, next) => {
         product: product,
         pageTitle: product.title + " | phoenix.com",
         path: "/products",
+        isAuthenticated: req.isLoggendIn,
       });
     })
     .catch(err => console.log(err));
@@ -36,6 +38,7 @@ exports.getIndex = (req, res, next) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Home | phoenix.com",
+        isAuthenticated: req.isLoggendIn,
         path: "/",
       });
     })
@@ -67,6 +70,7 @@ exports.getCart = (req, res, next) => {
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
+        isAuthenticated: req.isLoggendIn,
         products: products,
         items: totalItems,
         totalPrice: totalPrice,
@@ -190,6 +194,7 @@ exports.getOrders = (req, res, next) => {
       return res.render("shop/shop-orders", {
         pageTitle: "My Orders | phoenix.com",
         path: "/orders",
+        isAuthenticated: req.isLoggendIn,
         orders: orders,
       });
     })

@@ -17,6 +17,7 @@
         <i data-feather="list" class="me-2 mt-n1"></i>
         Products
       </a>
+      <% if(isAuthenticated) { %>
       <a class="nav-link <%= path === '/cart' ? 'active': '' %>" href="/cart">
         <i data-feather="shopping-cart" class="me-2 mt-n1"></i>
         Cart
@@ -28,6 +29,7 @@
         <i data-feather="send" class="me-2 mt-n1"></i>
         Orders
       </a>
+      <% } %>
       <a
         class="nav-link <%= path === '/orders' ? 'active': '' %>"
         href="/login"
