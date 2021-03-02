@@ -8,8 +8,6 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: "Admin - Products | phoenix.com  💌  ",
         path: "/admin/products",
-        isAuthenticated: req.isLoggendIn,
-        csrfToken: req.csrfToken(),
       });
     })
     .catch(err => console.log(err));
@@ -19,9 +17,7 @@ exports.getAddProduct = (req, res, next) => {
   res.render("admin/admin-form-product", {
     pageTitle: "Admin - Add Products | phoenix.com",
     path: "/admin/add-product",
-    isAuthenticated: req.isLoggendIn,
     editing: false,
-    csrfToken: req.csrfToken(),
   });
 };
 
@@ -69,9 +65,7 @@ exports.getEditProduct = (req, res, next) => {
       pageTitle: "Admin - Edit Product | phoenix.com ",
       path: "/admin/edit-product",
       editing: editMode,
-      isAuthenticated: req.isLoggendIn,
       product: product,
-      csrfToken: req.csrfToken(),
     });
   });
 };

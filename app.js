@@ -48,15 +48,25 @@ app.use((req, res, next) => {
     return next();
   }
 
-  UserModel.find({
+  UserModel.findOne({
     email: req.session?.user?.email,
   })
     .then(user => {
-      console.log(user);
-      req.user = user[0];
+      req.user = user;
       next();
     })
     .catch(err => console.log(err));
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  if (req.user) {
+    res.locals.user = req.user;
+  }
+
+  next();
 });
 
 app.use("/admin", adminRoutes);

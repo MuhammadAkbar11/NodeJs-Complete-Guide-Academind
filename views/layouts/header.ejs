@@ -1,12 +1,21 @@
 <header class="phoenix-header">
   <div class="phx-header phx-header-left">
-    <a href="#" class=" phx-toggle text-primary "><i data-feather="menu" class="display-4"></i></a>
+    <a href="#" class="phx-toggle text-primary"
+      ><i data-feather="menu" class="display-4"></i
+    ></a>
   </div>
   <div class="phx-header phx-header-main">
     <p></p>
   </div>
   <div class="phx-header phx-header-right">
-    <div class="flex">
+    <div class="d-flex align-items-end flex-nowrap flex-row">
+      <% if(user) { %>
+      <span class="me-2 fs-6 text-capitalize text-nowrap"
+        >Hi, <%= user.name %></span
+      >
+      <% } else { %>
+      <span>Anonim</span>
+      <% } %>
       <i data-feather="user"></i>
     </div>
   </div>

@@ -11,8 +11,6 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: "All Products | phoenix.com",
         path: "/products",
-        isAuthenticated: req.session.isLoggedIn,
-        csrfToken: req.csrfToken(),
       });
     })
     .catch(err => console.log(err));
@@ -27,8 +25,6 @@ exports.getDetailProduct = (req, res, next) => {
         product: product,
         pageTitle: product.title + " | phoenix.com",
         path: "/products",
-        csrfToken: req.csrfToken(),
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch(err => console.log(err));
@@ -40,8 +36,6 @@ exports.getIndex = (req, res, next) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Home | phoenix.com",
-        isAuthenticated: req.session.isLoggedIn,
-        csrfToken: req.csrfToken(),
         path: "/",
       });
     })
@@ -73,10 +67,8 @@ exports.getCart = (req, res, next) => {
       res.render("shop/shop-cart", {
         pageTitle: "Your Cart | phoenix.com",
         path: "/cart",
-        isAuthenticated: req.session.isLoggedIn,
         products: products,
         items: totalItems,
-        csrfToken: req.csrfToken(),
         totalPrice: totalPrice,
       });
     })
@@ -196,9 +188,7 @@ exports.getOrders = (req, res, next) => {
       return res.render("shop/shop-orders", {
         pageTitle: "My Orders | phoenix.com",
         path: "/orders",
-        isAuthenticated: req.session.isLoggedIn,
         orders: orders,
-        csrfToken: req.csrfToken(),
       });
     })
     .catch(err => console.log(err));
