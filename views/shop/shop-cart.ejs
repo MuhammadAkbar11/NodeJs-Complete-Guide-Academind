@@ -139,6 +139,8 @@
             action="/create-order"
             method="post"
           >
+            <!-- CSRF -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <div class="d-flex justify-content-between text-dark mt-2">
               <p class="text-uppercase">
                 Items <span class="ms-2"><%= items %></span>

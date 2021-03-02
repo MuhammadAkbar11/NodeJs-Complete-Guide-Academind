@@ -9,6 +9,7 @@ exports.getLogin = (req, res, next) => {
   res.render("auth/log-in", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
+    csrfToken: req.csrfToken(),
   });
 };
 
@@ -59,6 +60,7 @@ exports.getSignUp = (req, res) => {
   res.render("auth/sign-up", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
+    csrfToken: req.csrfToken(),
   });
 };
 

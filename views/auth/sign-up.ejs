@@ -12,6 +12,7 @@
             <p class="fs-3">Phoe<span class="text-primary">nix.Com</span></p>
           </div>
           <form action="/signup" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <div class="mb-2">
               <label for="name" class="form-label fs-6 text-dark"
                 >Name</label

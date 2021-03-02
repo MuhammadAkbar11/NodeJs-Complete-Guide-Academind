@@ -41,6 +41,7 @@
     "connect-mongodb-session": "^2.4.1",
     "css-loader": "^5.0.2",
     "cssnano": "^4.1.10",
+    "csurf": "^1.11.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express-session": "^1.17.1",
