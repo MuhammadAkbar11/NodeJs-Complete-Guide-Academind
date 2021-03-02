@@ -4,7 +4,7 @@ exports.getLogin = (req, res, next) => {
   if (req.user) {
     return res.redirect("/");
   }
-  res.render("auth/login", {
+  res.render("auth/log-in", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
   });
@@ -33,6 +33,19 @@ exports.postLogin = (req, res) => {
     })
     .catch(err => console.log(err));
 };
+
+exports.getSignUp = (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
+
+  res.render("auth/sign-up", {
+    pageTitle: "Login | phoenix.com",
+    path: "/login",
+  });
+};
+
+exports.postSignUp = (req, res) => {};
 
 exports.logout = (req, res) => {
   req.session.destroy(err => {
