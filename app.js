@@ -4,6 +4,7 @@ const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 const errorController = require("./controllers/error");
 const UserModel = require("./models/userModel");
@@ -20,13 +21,17 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
-// eslint-disable-nMongoDBConnect
+
+app.use(
+  session({ secret: "phoenix secret", resave: false, saveUninitialized: false })
+);
+
 app.use((req, res, next) => {
-  const isLoggendIn = req.get("Cookie").split(";")[1].split("=")[1];
+  // const isLoggendIn = req.get("Cookie").split(";")[1].split("=")[1];
   UserModel.findById("603ba9308b492851e444517b")
     .then(user => {
       req.user = user;
-      req.isLoggendIn = isLoggendIn;
+      // req.isLoggendIn = isLoggendIn;
       next();
     })
     .catch(err => console.log(err));
