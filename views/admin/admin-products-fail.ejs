@@ -1,0 +1,173 @@
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
+<%- include('../layouts/sidebar-admin.ejs') %>
+
+<main class="phoenix-main">
+  <div class="container-fluid pb-5">
+    <!-- Title page -->
+    <div class="row">
+      <div class="fs-5 d-flex align-items-center">
+        <i data-feather="package" class="mt-n1"></i>
+        <span class="mt-1 ms-2">Products</span>
+      </div>
+    </div>
+
+    <% if(flashdata.length > 0) { %>
+      <div
+        class="toast-container position-fixed top-0 end-0 p-3"
+        style="z-index: 10"
+      >
+        <% flashdata.forEach(flash => { %>
+        <div
+          class="toast toast-flash bg-<%= flash.type === "error" ? "danger" : flash.type %>"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          style="opacity: 1"
+        >
+          <div class="toast-header bg-<%= flash.type === "error" ? "danger" : flash.type %>  text-light">
+            <% if(flash.type === "error") { %>
+            <i data-feather="x-circle"></i>
+            <% } else { %>
+            <i data-feather="check-circle"></i>
+            <% } %>
+
+            <strong class="me-auto ms-2"></strong>
+            <small class="">now</small>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="toast"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="toast-body text-light"><%= flash.message %></div>
+        </div>
+
+        <% }) %>
+      </div>
+      <!-- end of toast -->
+      <% } %>
+    <div class="row mt-3 mt-md-5">
+      <div class="col-lg-12 col-md-12 px-0">
+        <div class="card border bg-transparent shadow-sm border-0 pt-4">
+          <div class="card-header bg-transparent border-0">
+            <a href="/admin/add-product" class="btn btn-primary text-light">
+              <i data-feather="plus"></i>
+              Add new product
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class=" ">
+                  <tr>
+                    <th>No</th>
+                    <th colspan="2">Title</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th colspan="2" class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (prods.length > 0) { %> <% let no = 1 %> <% for (const
+                  product of prods) { %>
+                  <tr>
+                    <td><%= no++ %></td>
+                    <td colspan="2">
+                      <div class="text-nowrap"><%= product.title %></div>
+                    </td>
+                    <td>
+                      <span class="text-nowrap">
+                        <%= product.price.rupiah %>
+                      </span>
+                    </td>
+                    <td>
+                      <div
+                        style="width: 200px"
+                        class="overflow-hidden text-nowrap text-ellipsis"
+                      >
+                        <%= product.description %>
+                      </div>
+                    </td>
+                    <td>
+                      <img height="70" src="<%= product.imageUrl%>" alt="" />
+                    </td>
+                    <td>
+                      <div class="d-flex flex-nowrap justify-content-center">
+                        <a
+                          href="/admin/edit-product/<%= product._id %>?edit=true"
+                          class="badge bg-primary text-white me-2"
+                        >
+                          <i data-feather="edit"></i>
+                        </a>
+
+
+                          <button type="button" class="badge border border-primary text-primary"
+                            data-bs-toggle="modal" data-bs-target="#deleteProduct"  >
+                            <i data-feather="trash-2"></i>
+                          </button>
+
+                      </div>
+                    </td>
+                  </tr>
+                  <% } %> <% } else { %>
+                  <tr>
+                    <td colspan="5 " class="text-center">No Product</td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="deleteProduct"
+  tabindex="-1"
+  aria-labelledby="deleteProductLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteProductLabel">Modal title</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <form action="/admin/delete-product" method="POST">
+          <input type="hidden" value="<%= product._id %>" name="productId" />
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <button type="button" class="btn btn-primary">Delete Product</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

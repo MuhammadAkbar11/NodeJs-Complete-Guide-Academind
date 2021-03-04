@@ -11,6 +11,22 @@
             <p class="my-0">Welcome to</p>
             <p class="fs-3">Phoe<span class="text-primary">nix.Com</span></p>
           </div>
+          <!-- alert -->
+
+          <% if(flashdata) { %>
+          <div
+            class="alert text-light bg-<%= flashdata.type === "error" ? "danger" : flashdata.type %> alert-dismissible fade show"
+            role="alert"
+          >
+            <%= flashdata.message %>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          <% } %>
           <form action="/login" method="POST">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <div class="mb-3">

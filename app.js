@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const Csurf = require("csurf");
+const flash = require("connect-flash");
 
 const errorController = require("./controllers/error");
 const UserModel = require("./models/userModel");
@@ -36,12 +37,14 @@ app.use(
   session({
     secret: "phoenix secret",
     resave: false,
+    unset: "destroy",
     saveUninitialized: false,
     store: store,
   })
 );
 
 app.use(csrufProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -64,6 +67,8 @@ app.use((req, res, next) => {
 
   if (req.user) {
     res.locals.user = req.user;
+  } else {
+    res.locals.user = null;
   }
 
   next();

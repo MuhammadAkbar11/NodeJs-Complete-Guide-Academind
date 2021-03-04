@@ -2,12 +2,14 @@ const ProductModel = require("../models/productModel");
 const formatRupiah = require("../util/formatRupiah");
 
 exports.getProducts = (req, res, next) => {
+  const flashdata = req.flash("flashdata");
   ProductModel.find()
     .then(products => {
       res.render("admin/admin-products", {
         prods: products,
         pageTitle: "Admin - Products | phoenix.com  💌  ",
         path: "/admin/products",
+        flashdata: flashdata,
       });
     })
     .catch(err => console.log(err));
@@ -44,8 +46,11 @@ exports.postAddProducts = (req, res, next) => {
   product
     .save()
     .then(result => {
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success adding new product",
+      });
       res.redirect("/admin/products");
-      console.log("new data has been created!!");
     })
     .catch(err => console.log(err));
 };
@@ -56,16 +61,20 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/admin/admin-products");
   }
 
+  const flashdata = req.flash("flashdata");
+
   const prodId = req.params.productId;
   ProductModel.findById(prodId).then(product => {
     if (!product) {
       return res.redirect("/admin/product");
     }
+
     res.render("admin/admin-form-product", {
       pageTitle: "Admin - Edit Product | phoenix.com ",
       path: "/admin/edit-product",
       editing: editMode,
       product: product,
+      flashdata: flashdata,
     });
   });
 };
@@ -102,6 +111,10 @@ exports.postEditProducts = (req, res, next) => {
       );
     })
     .then(result => {
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success update product",
+      });
       res.redirect("/admin/products");
     })
     .catch(err => console.log(err));
@@ -109,12 +122,28 @@ exports.postEditProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
+  if (prodId.trim() === "") {
+    req.flash("flashdata", {
+      type: "error",
+      message: "Failed to delete data!",
+    });
+  }
 
+  console.log(prodId);
   ProductModel.findByIdAndRemove(prodId)
     .then(() => {
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success deleting product",
+      });
       res.redirect("/admin/products");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      req.flash("flashdata", {
+        type: "error",
+        message: "Failed to delete data!",
+      });
+    });
 };
 
 // // basic page

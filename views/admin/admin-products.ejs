@@ -1,23 +1,54 @@
-<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
+<%- include('../layouts/admin-head.ejs') %>
+<!-- prettier-ingnore -->
+<%- include('../layouts/header.ejs') %>
+<!-- prettier-ingnore -->
 <%- include('../layouts/sidebar-admin.ejs') %>
 
 <main class="phoenix-main">
   <div class="container-fluid pb-5">
-    <!-- Title page -->
+
+    <!-- bread... -->
     <div class="row">
-      <div class="fs-5 d-flex align-items-center ">
+      <div class="fs-5 d-flex align-items-center">
         <i data-feather="package" class="mt-n1"></i>
         <span class="mt-1 ms-2">Products</span>
-      </h5>
+      </div>
     </div>
 
-    <div class="row px-0 mt-3 mt-md-5">
-      <div class="col-lg-11 col-md-12 px-0">
-        <div class="card border bg-transparent shadow pt-4">
+    <!-- Toast -->
+    <div class="row">
+      <% if( flashdata.length> 0) { %>
+      <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 10">
+        <!-- List Toast -->
+        <% flashdata.forEach(flash => { %>
+        <!-- check type -->
+        <% if(flash.type === "error") { %>
+        <!-- toast error -->
+        <%- include('../includes/toast-danger.ejs', {flashdata: { message:
+        flash.message }}) %>
+        <!-- ==== -->
+        <% } else { %>
+        <!-- import other toasts -->
+        <%- include('../includes/toasts.ejs', { flashdata : { type: flash.type,
+        message : flash.message } }) %>
+        <!-- end if -->
+        <% } %>
+        <!-- Enf of foreach -->
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+    <!-- enf of row taost -->
+
+    <!-- row products -->
+    <div class="row mt-3 mt-md-5">
+      <div class="col-lg-12 col-md-12 px-0">
+        <div class="card border bg-transparent shadow-sm border-0 pt-4">
           <div class="card-header bg-transparent border-0">
-            <a href="/admin/add-product" class="btn btn-primary text-light"
-              ><i data-feather="plus"></i> Add new product</a
-            >
+            <a href="/admin/add-product" class="btn btn-primary text-light">
+              <i data-feather="plus"></i>
+              Add new product
+            </a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -25,7 +56,7 @@
                 <thead class=" ">
                   <tr>
                     <th>No</th>
-                    <th colspan="2">Title</th>
+                    <th>Title</th>
                     <th>Price</th>
                     <th>Description</th>
                     <th>Image</th>
@@ -33,12 +64,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% if (prods.length > 0) { %> <% let no = 1 %> <% for (const
-                  product of prods) { %>
+                  <% if (prods.length > 0) { %>
+                  <!-- - -->
+                  <% let no = 1 %>
+                  <!-- prettier-disabled -->
+                  <% for (const product of prods) { %>
+                  <!-- = -->
                   <tr>
                     <td><%= no++ %></td>
-                    <td colspan="2">
-                      <div class="text-nowrap"><%= product.title %></div>
+                    <td>
+                      <div style="width: 170px" class="overflow-hidden text-nowrap text-ellipsis">
+                        <%= product.title %>
+                      </div>
                     </td>
                     <td>
                       <span class="text-nowrap">
@@ -46,45 +83,44 @@
                       </span>
                     </td>
                     <td>
-                      <div
-                        style="width: 200px"
-                        class="overflow-hidden text-nowrap text-ellipsis"
-                      >
+                      <div style="width: 150px" class="overflow-hidden text-nowrap text-ellipsis">
                         <%= product.description %>
                       </div>
                     </td>
                     <td>
                       <img height="70" src="<%= product.imageUrl%>" alt="" />
                     </td>
+
                     <td>
                       <div class="d-flex flex-nowrap justify-content-center">
-                        <a
-                          href="/admin/edit-product/<%= product._id %>?edit=true"
-                          class="badge bg-primary text-white me-2"
-                        >
+                        <a href="/admin/edit-product/<%= product._id %>?edit=true"
+                          class="badge bg-primary text-white me-2">
                           <i data-feather="edit"></i>
                         </a>
-                        <form action="/admin/delete-product" method="POST">
-                          <input
-                            type="hidden"
-                            value="<%= product._id %>"
-                            name="productId"
-                          />
-                          <button
-                            class="badge border border-primary text-primary"
-                            type="submit"
-                          >
-                            <i data-feather="trash-2"></i>
-                          </button>
-                        </form>
+                        <a href="#" class="badge border border-primary text-primary me-2">
+                          <i data-feather="info"></i>
+                        </a>
+                        <!-- <form action="/admin/delete-product" method="POST">
+                          <input type="hidden" value="<%= product._id %>" name="productId" />
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>" /> -->
+                        <button type="submit" class="btn text-white btn-danger" data-bs-toggle="modal"
+                          data-bs-target="#modalConfirmDelete" data-id="<%= product._id   %> ">
+                          <i data-feather="trash-2"></i>
+                        </button>
+                        <!-- </form> -->
+                        <!--  -->
                       </div>
                     </td>
                   </tr>
-                  <% } %> <% } else { %>
+                  <% } %>
+                  <!-- = -->
+                  <% } else { %>
+                  <!-- = -->
                   <tr>
-                    <td colspan="5 " class="text-center">No Product</td>
+                    <td style="width: 100%" class="text-center">No Product</td>
                   </tr>
                   <% } %>
+                  <!-- = -->
                 </tbody>
               </table>
             </div>
@@ -92,7 +128,55 @@
         </div>
       </div>
     </div>
+    <!-- end of row product -->
   </div>
 </main>
 
-<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>
+<!-- Modal -->
+<div class="modal  hide" id="modalConfirmDelete" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="modalConfirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+
+      </div>
+      <div class="modal-body" style="min-height: 200px;">
+        <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center ">
+          <div class="text-warning fs-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="88" height="88" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-alert-triangle">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="my-2 text-center">
+            <p class="fs-2 modal-title text-dark ">
+              Are You Sure?
+            </p>
+            <p class="fs-6 modal-text text-muted mt-3">
+              You will delete this product permanent!
+            </p>
+          </div>
+          <form id="form-delete" action="/admin/delete-product" method="POST">
+            <input type="hidden" value="" name="productId" id="product-id" />
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-center">
+        <button type="button" class="btn btn-danger text-light" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-delete">Yes, Delete it</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/admin-end.ejs')
+%>
+
+<!-- Button trigger modal
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Launch static backdrop modal
+</button> -->

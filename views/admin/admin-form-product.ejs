@@ -1,5 +1,5 @@
-<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
-<%- include('../layouts/sidebar-admin.ejs') %>
+<%- include('../layouts/admin-head.ejs') %> <%- include('../layouts/header.ejs')
+%> <%- include('../layouts/sidebar-admin.ejs') %>
 
 <main class="phoenix-main">
   <div class="container-fluid">
@@ -17,58 +17,32 @@
       </h5>
     </div>
     <div class="row px-0 mt-4">
-      <div class="col-8 pl-0">
+      <div class="col-lg-8 pl-0 col-xl-11">
         <div class="card border-0 bg-transparent shadow-sm pt-4">
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
-                <form
-                  action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>"
-                  method="POST"
-                >
+                <form action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
                   <div class="row mb-3">
-                    <div class="col-md-6">
-                      <input
-                        type="hidden"
-                        name="_csrf"
-                        value="<%= csrfToken %>"
-                      />
+                    <div class="col-lg-6">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                       <% if (editing) { %>
-                      <input
-                        type="hidden"
-                        value="<%= product._id %>"
-                        name="productId"
-                      />
+                      <input type="hidden" value="<%= product._id %>" name="productId" />
                       <% } %>
                       <div class="form-group row">
-                        <label for="" class="col-form-label col-md-4"
-                          >Title</label
-                        >
-                        <div class="col-md-8">
-                          <input
-                            type="text"
-                            class="form-control form-control-lg bg-transparent"
-                            name="title"
-                            id="title"
-                            value="<% if (editing) { %><%= product.title %><% } %>"
-                          />
+                        <label for="" class="col-form-label col-lg-4">Title</label>
+                        <div class="col-lg-8">
+                          <input type="text" class="form-control form-control-lg bg-transparent" name="title" id="title"
+                            value="<% if (editing) { %><%= product.title %><% } %>" />
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                       <div class="form-group row">
-                        <label for="" class="col-form-label col-md-3"
-                          >Price</label
-                        >
-                        <div class="col-md-9">
-                          <input
-                            type="text"
-                            class="form-control form-control-lg bg-transparent"
-                            name="price"
-                            id="price"
-                            step="0.01"
-                            value="<% if (editing) { %><%= product.price.num %><% } %>"
-                          />
+                        <label for="" class="col-form-label col-lg-3">Price</label>
+                        <div class="col-lg-9">
+                          <input type="text" class="form-control form-control-lg bg-transparent" name="price" id="price"
+                            step="0.01" value="<% if (editing) { %><%= product.price.num %><% } %>" />
                         </div>
                       </div>
                     </div>
@@ -76,35 +50,20 @@
                   <div class="row">
                     <div class="col-md-12 mb-3">
                       <div class="form-group row">
-                        <label for="" class="col-form-label col-md-2"
-                          >ImgUrl</label
-                        >
-                        <div class="col-md-10">
-                          <input
-                            type="text"
-                            class="form-control form-control-lg bg-transparent"
-                            name="imageUrl"
-                            id="imageUrl"
-                            value="<% if (editing) { %><%= product.imageUrl %><% } %>"
-                          />
+                        <label for="" class="col-form-label col-lg-2">ImgUrl</label>
+                        <div class="col-lg-10">
+                          <input type="text" class="form-control form-control-lg bg-transparent" name="imageUrl"
+                            id="imageUrl" value="<% if (editing) { %><%= product.imageUrl %><% } %>" />
                         </div>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="form-group row">
-                        <label for="" class="col-form-label col-md-2"
-                          >Description</label
-                        >
-                        <div class="col-md-10">
-                          <textarea
-                            name="description"
-                            id="description"
-                            class="form-control form-control-lg bg-transparent"
-                            cols="30"
-                            rows="3"
-                          >
-<% if (editing) { %><%= product.description %><% } %></textarea
-                          >
+                        <label for="" class="col-form-label col-lg-2">Description</label>
+                        <div class="col-lg-10">
+                          <textarea name="description" id="description"
+                            class="form-control form-control-lg bg-transparent" cols="30" rows="3">
+<% if (editing) { %><%= product.description %><% } %></textarea>
                         </div>
                       </div>
                     </div>
@@ -112,10 +71,7 @@
                       <div class="row px-2">
                         <div class="col-6 col-md-8"></div>
                         <div class="col-6 col-md-4 d-grid">
-                          <button
-                            class="btn btn-primary text-light"
-                            type="submit"
-                          >
+                          <button class="btn btn-primary text-light" type="submit">
                             <% if (editing) { %>Update Product<% } else { %>Add
                             Product<% } %>
                           </button>
@@ -133,4 +89,5 @@
   </div>
 </main>
 
-<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/admin-end.ejs')
+%>

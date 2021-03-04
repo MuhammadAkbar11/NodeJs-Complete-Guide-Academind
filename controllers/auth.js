@@ -6,10 +6,13 @@ exports.getLogin = (req, res, next) => {
   if (req.user) {
     return res.redirect("/");
   }
+
+  const flashdata = req.flash("flashdata");
+
   res.render("auth/log-in", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
-    csrfToken: req.csrfToken(),
+    flashdata: flashdata[0],
   });
 };
 
@@ -25,8 +28,11 @@ exports.postLogin = (req, res) => {
     email: email,
   })
     .then(user => {
-      console.log(user);
       if (!user) {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Invalid email",
+        });
         return res.redirect("/login");
       }
 
@@ -38,14 +44,26 @@ exports.postLogin = (req, res) => {
             req.session.user = user;
             return req.session.save(err => {
               if (err) {
+                req.flash("flashdata", {
+                  type: "error",
+                  message: "Failed to login",
+                });
                 res.redirect("/login");
               }
               res.redirect("/");
             });
           }
+          req.flash("flashdata", {
+            type: "error",
+            message: "Wrong password",
+          });
           res.redirect("/login");
         })
         .catch(err => {
+          req.flash("flashdata", {
+            type: "error",
+            message: "Failed to login",
+          });
           err && res.redirect("/login");
         });
     })
@@ -56,11 +74,12 @@ exports.getSignUp = (req, res) => {
   if (req.user) {
     return res.redirect("/");
   }
-
+  const flashdata = req.flash("flashdata");
   res.render("auth/sign-up", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
     csrfToken: req.csrfToken(),
+    flashdata: flashdata[0],
   });
 };
 
@@ -75,6 +94,10 @@ exports.postSignUp = (req, res) => {
   })
     .then(userDoc => {
       if (userDoc) {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Email already exits, please take one",
+        });
         return res.redirect("/signup");
       }
       return bcrypt.hash(password, 12).then(hashedPw => {
@@ -89,11 +112,15 @@ exports.postSignUp = (req, res) => {
       });
     })
     .then(result => {
+      req.flash("success", "Success create an account!");
       res.redirect("/login");
     })
     .catch(err => {
       if (err) {
-        console.log(err);
+        req.flash("flashdata", {
+          type: "error",
+          message: "Failed to sing up",
+        });
         res.redirect("/signup");
       }
     });
@@ -101,6 +128,6 @@ exports.postSignUp = (req, res) => {
 
 exports.logout = (req, res) => {
   return req.session.destroy(err => {
-    res.redirect("/");
+    res.redirect("/login");
   });
 };
