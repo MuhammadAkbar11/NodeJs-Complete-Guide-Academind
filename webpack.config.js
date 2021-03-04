@@ -7,10 +7,15 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    phoenix: "./src/index.client.js",
+    client: "./src/client/index.client.js",
+    admin: "./src/admin/index.admin.js",
     bootstrapV5: path.resolve(
       __dirname,
       "node_modules/bootstrap/dist/js/bootstrap.js"
+    ),
+    "feather-icons": path.resolve(
+      __dirname,
+      "node_modules/feather-icons/dist/feather.min.js"
     ),
   },
   watch: true,
@@ -21,7 +26,7 @@ module.exports = {
   },
   mode: "production",
   output: {
-    filename: "js/[name].client.js",
+    filename: "js/phoenix-[name].min.js",
     path: path.resolve(__dirname, "public/dist"),
   },
 
@@ -57,7 +62,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: "css/phoenix.min.css",
+      filename: "css/phoenix-[name].min.css",
     }),
   ],
 };

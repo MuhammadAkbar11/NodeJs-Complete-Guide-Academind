@@ -7,7 +7,7 @@
     "start": "nodemon  app.js",
     "debug": "env PORT=8000 nodemon --inspect app.js",
     "check-port": "lsof -i tcp:5050",
-    "styles": "webpack  --config webpack.config.js "
+    "webpack": "webpack  --config webpack.config.js "
   },
   "repository": {
     "type": "git",
