@@ -1,7 +1,7 @@
 {
-  "name": "bagian_14__adding-authentication",
+  "name": "bagian_14__sending-email",
   "version": "1.0.5",
-  "description": "Tutorial Bagian 11 MongoDB",
+  "description": "Tutorial Bagian 15 Sending Email",
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",
