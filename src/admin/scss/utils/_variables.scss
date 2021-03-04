@@ -1,0 +1,32 @@
+$info: #2ef8ff;
+$primary: #4e2372;
+$primary-dark: darken($primary, 10);
+
+$secondary: #16044b;
+$danger: #fc265b;
+
+$theme-colors: (
+  "primary": $primary,
+  "primary-dark": $primary-dark,
+  "secondary": $secondary,
+  "info": $info,
+  "danger": $danger,
+  "success": #10b981,
+  "warning": $warning,
+  "light": $light,
+  "dark": $dark,
+  "dark-gray": $gray-700,
+  "light-gray": $gray-200,
+  "white-500": $gray-100,
+);
+
+$navbar-dark-color: $info;
+$navbar-dark-toggler-border-color: $info;
+
+$table-cell-padding-y: 1rem;
+$table-cell-padding-x: 0.5rem;
+
+$input-focus-border-color: tint-color($primary, 50%);
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+
+@import "./spacing";

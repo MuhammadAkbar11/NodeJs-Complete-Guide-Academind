@@ -1,0 +1,27 @@
+$phx-pt: 2rem;
+$phx-pl: 2rem;
+$phx-pr: 1.9rem;
+
+.phoenix {
+  &-wrapper {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $light;
+    width: 100%;
+
+    // grid
+    display: grid;
+
+    grid-template-areas: "sidebar header" "sidebar main" "sidebar footer";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr 50px;
+
+    @import "./phoenix.sidebar";
+
+    @import "./phoenix.main";
+
+    @import "./phoenix.header";
+    @import "./phoenix.footer";
+  }
+}

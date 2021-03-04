@@ -1,0 +1,18 @@
+.phoenix-main {
+  position: relative;
+  grid-area: main;
+  padding: {
+    left: $phx-pl;
+    right: $phx-pr;
+    top: 1rem;
+  }
+  min-height: 1fr;
+
+  overflow-y: scroll;
+
+  @include media-breakpoint-up(md) {
+    &.phoenix-main-100vh {
+      height: 1fr;
+    }
+  }
+}

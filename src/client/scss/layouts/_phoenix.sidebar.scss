@@ -1,0 +1,145 @@
+.phoenix-sidebar {
+  position: relative;
+  grid-area: sidebar;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 250px;
+  height: 100%;
+  color: $gray-800;
+  background-color: $gray-100;
+
+  padding: {
+    top: $phx-pt;
+    left: $phx-pl;
+    bottom: 1rem;
+    right: 0;
+  }
+  .phx-sidebar {
+    &-top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding-bottom: 1.3rem;
+      padding-right: 1.2rem;
+
+      .phx-logo {
+        &-text {
+          font-size: 28px;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+      }
+    }
+
+    &-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 1fr;
+
+      // &:hover {
+      //   overflow-y: scroll;
+
+      //   &::-webkit-scrollbar {
+      //     background-color: springgreen !important;
+      //     width: 20px !important;
+      //   }
+      // }
+      padding-right: 1rem;
+
+      .nav {
+        width: 100%;
+        .nav-link {
+          margin-top: 0.7rem;
+          width: 100%;
+          color: $gray-600;
+
+          span {
+            font-size: 18px !important;
+          }
+          transition: 0.3s all ease-in-out;
+
+          &:hover,
+          &:focus,
+          &:active,
+          &.active {
+            background-color: $gray-300;
+            color: $primary;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+
+    &-bottom {
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    &-close {
+      cursor: pointer;
+      position: relative;
+      border-radius: 50%;
+      padding: 0.2rem;
+      background-color: rgba($primary, $alpha: 0.3) !important;
+
+      &::hover {
+        background-color: rgba($primary, $alpha: 0.7) !important;
+      }
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
+    & {
+      // z-index: 2000 !important;
+      // position: fixed;
+      // width: 240px;
+
+      // left: -250px;
+      // transition: 0.3s ease-in-out;
+      transition: 0.2s all ease-in-out;
+
+      .phx-sidebar {
+        &-close {
+          cursor: pointer;
+          display: none !important;
+        }
+      }
+    }
+
+    &.show {
+      transition: 0.2s all ease-in-out;
+      transform-origin: 0 0;
+      // display: none !important;
+      transform: scaleX(0);
+      width: 0px !important;
+      // left: 0px !important;
+
+      .phx-sidebar {
+        &-close {
+          cursor: pointer;
+          display: none !important;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    & {
+      z-index: 2000 !important;
+      position: fixed;
+      width: 240px;
+
+      left: -250px;
+      transition: 0.3s ease-in-out;
+
+      &.show {
+        left: 0px !important;
+      }
+    }
+  }
+}
