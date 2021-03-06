@@ -26,7 +26,7 @@ const sendMail = async (options = mailOptions) => {
     path.resolve(__dirname, "../views/email-verification.ejs"),
     "ascii"
   );
-  const rendered = ejs.render(file, { text: "haii" });
+  const rendered = ejs.render(file, { email: options.to });
 
   const message = {
     from: `${options.fromName} phoenix.production98@gmail.com`,

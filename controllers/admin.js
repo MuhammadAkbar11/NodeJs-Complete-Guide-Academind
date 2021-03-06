@@ -129,7 +129,6 @@ exports.postDeleteProduct = (req, res, next) => {
     });
   }
 
-  console.log(prodId);
   ProductModel.findByIdAndRemove(prodId)
     .then(() => {
       req.flash("flashdata", {

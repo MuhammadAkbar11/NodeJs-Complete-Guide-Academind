@@ -19,6 +19,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  authorization: {
+    type: Boolean,
+    required: true,
+  },
   cart: {
     items: [
       {

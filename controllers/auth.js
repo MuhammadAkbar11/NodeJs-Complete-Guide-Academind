@@ -9,11 +9,10 @@ exports.getLogin = (req, res, next) => {
   }
 
   const flashdata = req.flash("flashdata");
-
   res.render("auth/log-in", {
     pageTitle: "Login | phoenix.com",
     path: "/login",
-    flashdata: flashdata[0],
+    flashdata: flashdata,
   });
 };
 
@@ -80,7 +79,7 @@ exports.getSignUp = (req, res) => {
     pageTitle: "Login | phoenix.com",
     path: "/login",
     csrfToken: req.csrfToken(),
-    flashdata: flashdata[0],
+    flashdata: flashdata,
   });
 };
 
@@ -106,17 +105,19 @@ exports.postSignUp = (req, res) => {
           name: name,
           email: email,
           password: hashedPw,
+          authorization: false,
           role: "user",
           cart: { items: [] },
         });
         return user.save();
+        // return true;
       });
     })
     .then(result => {
-      req.flash(
-        "success",
-        "Success create an account, please check your email"
-      );
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success create an account, please check your email",
+      });
       res.redirect("/login");
       return sendMail({
         fromName: "phoenix",
@@ -135,6 +136,32 @@ exports.postSignUp = (req, res) => {
         });
         res.redirect("/signup");
       }
+    });
+};
+
+exports.authorization = (req, res) => {
+  const email = req.query.email;
+  UserModel.findOne({
+    email: email,
+  })
+    .then(user => {
+      return user.updateOne({
+        $set: { authorization: true },
+      });
+    })
+    .then(result => {
+      let flashObj = {
+        type: "info",
+        message: "Email alredy to verify!",
+      };
+      if (result.nModified > 0) {
+        flashObj = {
+          type: "success",
+          message: "Verification success!",
+        };
+      }
+      req.flash("flashdata", flashObj);
+      res.redirect("/login");
     });
 };
 
