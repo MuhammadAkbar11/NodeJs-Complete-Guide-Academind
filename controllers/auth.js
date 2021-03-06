@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
 
 const UserModel = require("../models/userModel");
-const sendMail = require("../util/sendMail");
+const {
+  sendMailVerification,
+  sendMailResetPassword,
+} = require("../util/sendMail");
 
 exports.getLogin = (req, res, next) => {
   if (req.user) {
@@ -119,11 +122,10 @@ exports.postSignUp = (req, res) => {
         message: "Success create an account, please check your email",
       });
       res.redirect("/login");
-      return sendMail({
+      return sendMailVerification({
         fromName: "phoenix",
         to: email,
         subject: "Verify your email!",
-        html: `<h1>You Successfully signed up!</h1>`,
       })
         .then(res => console.log(res))
         .catch(err => console.log(err));
@@ -163,6 +165,58 @@ exports.authorization = (req, res) => {
       req.flash("flashdata", flashObj);
       res.redirect("/login");
     });
+};
+
+exports.getForgotPassword = (req, res) => {
+  const flashdata = req.flash("flashdata");
+  res.render("auth/forgot-password", {
+    pageTitle: "Forgot Password | phoenix.com",
+    path: "/forgot-password",
+    csrfToken: req.csrfToken(),
+    flashdata: flashdata,
+  });
+};
+exports.getForgotPasswordSuccess = (req, res) => {
+  const flashdata = req.flash("flashdata");
+  res.render("auth/forgot-password-success", {
+    pageTitle: "Request successfull | phoenix.com",
+    path: "/forgot-password-success",
+    csrfToken: req.csrfToken(),
+    flashdata: flashdata,
+  });
+};
+
+exports.postForgotPassword = (req, res) => {
+  const email = req.body.email;
+
+  if (email.trim() === "") {
+    req.flash("flashdata", {
+      type: "error",
+      message: "Please enter your email",
+    });
+    res.redirect("/forgot-password");
+  }
+
+  UserModel.findOne({
+    email: email,
+  })
+    .then(result => {
+      if (result === null) {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Email not found",
+        });
+        res.redirect("/forgot-password");
+      } else {
+        res.redirect("/forgot-password-success");
+        return sendMailResetPassword({
+          fromName: "Phoenix Production",
+          to: email,
+          subject: "Reset password",
+        });
+      }
+    })
+    .catch(err => console.log(err));
 };
 
 exports.logout = (req, res) => {
