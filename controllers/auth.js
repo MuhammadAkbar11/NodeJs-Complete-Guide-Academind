@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 
 const UserModel = require("../models/userModel");
+const sendMail = require("../util/sendMail");
 
 exports.getLogin = (req, res, next) => {
   if (req.user) {
@@ -112,8 +113,19 @@ exports.postSignUp = (req, res) => {
       });
     })
     .then(result => {
-      req.flash("success", "Success create an account!");
+      req.flash(
+        "success",
+        "Success create an account, please check your email"
+      );
       res.redirect("/login");
+      return sendMail({
+        fromName: "phoenix",
+        to: email,
+        subject: "Verify your email!",
+        html: `<h1>You Successfully signed up!</h1>`,
+      })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     })
     .catch(err => {
       if (err) {
