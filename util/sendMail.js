@@ -14,14 +14,11 @@ const transporter = nodemailer.createTransport({
 
 const mailOptions = {
   fromName: "",
-  fromEmail: "",
   to: "",
   subject: "",
-  message: "",
-  html: ``,
 };
 
-const sendMail = async (options = mailOptions) => {
+exports.sendMailVerification = async (options = mailOptions) => {
   const file = fs.readFileSync(
     path.resolve(__dirname, "../views/email-verification.ejs"),
     "ascii"
@@ -41,4 +38,22 @@ const sendMail = async (options = mailOptions) => {
   return info;
 };
 
-module.exports = sendMail;
+exports.sendMailResetPassword = async (options = mailOptions) => {
+  const file = fs.readFileSync(
+    path.resolve(__dirname, "../views/email-reset-password.ejs"),
+    "ascii"
+  );
+  const rendered = ejs.render(file, { email: options.to });
+
+  const message = {
+    from: `${options.fromName} phoenix.production98@gmail.com`,
+    to: options.to,
+    subject: options.subject,
+    text: options.message,
+    html: rendered,
+  };
+
+  const info = await transporter.sendMail(message);
+
+  return info;
+};
