@@ -13,9 +13,10 @@
 
           <% if(flashdata.length > 0) { %>
           <% flashdata.forEach(flash => { %>
-          <div class="alert  alert-<%= flash.type === "error" ? "danger" : flash.type %> alert-dismissible fade show"
+          <div
+            class="alert rounded-0 border-0 alert-<%= flash.type === "error" ? "danger" : flash.type %> alert-dismissible fade show"
             role="alert">
-            <%= flash.message %>
+            <small><%= flash.message %></small>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <% }) %>

@@ -240,7 +240,7 @@ exports.postForgotPassword = (req, res) => {
   });
 };
 
-exports.getResetPassword = (req, res) => {
+exports.getNewPassword = (req, res) => {
   const token = req.query.token;
   const flashdata = req.flash("flashdata");
   UserModel.findOne({
@@ -253,26 +253,70 @@ exports.getResetPassword = (req, res) => {
           message: "Invalid token",
         });
         return res.redirect("/login");
+      } else {
+        if (user.resetTokenExp > Date.now()) {
+          res.render("auth/new-password", {
+            pageTitle: "New password | phoenix.com",
+            path: "/new-password",
+            csrfToken: req.csrfToken(),
+            flashdata: flashdata,
+            user: user,
+          });
+        } else {
+          req.flash("flashdata", {
+            type: "error",
+            message: "token expaired",
+          });
+          return res.redirect("/login");
+        }
       }
-      if (!user.resetTokenExp > Date.now()) {
-        req.flash("flashdata", {
-          type: "error",
-          message: "token is expaired",
-        });
-        return res.redirect("/login");
-      }
-      res.render("auth/reset-password", {
-        pageTitle: "New password | phoenix.com",
-        path: "/reset-password",
-        csrfToken: req.csrfToken(),
-        flashdata: flashdata,
-        user: user,
-      });
     })
     .catch(err => console.log(err));
 };
-exports.postUpdatePassword = (req, res) => {
-  console.log(req.body);
+exports.postNewPassword = (req, res) => {
+  console.log(req.body, "post");
+  const userId = req.body.userId.trim();
+  const newPassword = req.body.password.trim();
+  const confirmPassword = req.body.password2.trim();
+  const passwordToken = req.body.passwordToken.trim();
+  let resetUser;
+  UserModel.findOne({
+    _id: userId,
+    resetToken: passwordToken,
+    resetTokenExp: { $gt: Date.now() },
+  })
+    .then(user => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then(hashedPw => {
+      if (resetUser !== null) {
+        resetUser.password = hashedPw;
+        (resetUser.resetToken = undefined),
+          (resetUser.resetTokenExp = undefined);
+        return resetUser.save();
+      } else {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Failed to set your new password",
+        });
+        return res.redirect("/new-password");
+      }
+    })
+    .then(result => {
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success to set new password",
+      });
+      return res.redirect("/login");
+    })
+    .catch(err => {
+      req.flash("flashdata", {
+        type: "error",
+        message: "Sorry, something wrong",
+      });
+      return res.redirect("/new-password");
+    });
 };
 
 exports.logout = (req, res) => {

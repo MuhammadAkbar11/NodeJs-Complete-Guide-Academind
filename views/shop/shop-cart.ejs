@@ -13,9 +13,7 @@
             <p class="ms-3 my-0 fs-5">Shopping Cart</p>
           </div>
         </div>
-        <div
-          class="card card-body border-0 rounded-0 bg-transparent pt-0 ps-0 pe-3"
-        >
+        <div class="card card-body border-0 rounded-0 bg-transparent pt-0 ps-0 pe-3">
           <% if(products.length > 0) { %>
           <div class="table-responsive">
             <table class="table table-borderless">
@@ -35,16 +33,9 @@
                 <tr class="lh-lg">
                   <td>
                     <div class="d-flex">
-                      <div
-                        style="width: 80px; height: 80px"
-                        class="position-relative me-2 border d-flex"
-                      >
-                        <img
-                          class="object-cover"
-                          src="<%= prod.productId.imageUrl
-                    %>"
-                          alt=""
-                        />
+                      <div style="width: 90px; height: 80px" class="position-relative me-2 border d-flex">
+                        <img class="img-object-cover " src="<%= prod.productId.imageUrl
+                    %>" alt="" />
                       </div>
 
                       <div class="d-flex flex-column ms-2 flex-nowrap">
@@ -52,27 +43,22 @@
                           <%= prod.productId.title %>
                         </p>
                         <!-- action cart -->
-                        <div class="flex flex-row mt-auto">
-                          <form action="/cart-delete-item" method="post">
-                            <a
-                              href="/cart-update-item/<%= prod.productId._id %>"
-                              class="btn btn-sm ps-0 btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto"
-                            >
+
+                        <form action="/cart-delete-item" method="post">
+                          <div class="d-flex flex-row mt-auto ">
+                            <a href="/cart-update-item/<%= prod.productId._id %>"
+                              class="btn btn-sm ps-0 btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto">
                               Edit
                             </a>
-                            <input
-                              type="hidden"
-                              value="<%= prod.productId._id %>"
-                              name="productId"
-                            />
+                            <input type="hidden" value="<%= prod.productId._id %>" name="productId" />
                             <button
                               class="btn btn-sm btn-link text-primary-dark-hover text-primary shadow-none rounded my-auto"
-                              type="submit"
-                            >
+                              type="submit">
                               Delete
                             </button>
-                          </form>
-                        </div>
+                          </div>
+                        </form>
+
                       </div>
                     </div>
                   </td>
@@ -80,30 +66,13 @@
                     <span class="px-4 text-nowrap"><%= prod.quantity %></span>
                   </td>
                   <td colspan="2">
-                    <span class="text-primary text-nowrap px-4"
-                      ><%= prod.productId.price.rupiah %>
+                    <span class="text-primary text-nowrap px-4"><%= prod.productId.price.rupiah %>
                     </span>
                   </td>
                   <td>
-                    <span class="text-primary text-nowrap px-4"
-                      ><%= prod.total %>
+                    <span class="text-primary text-nowrap px-4"><%= prod.total %>
                     </span>
-                  </td>
-                  <!-- <td>
-                    <form action="/cart-delete-item" method="post">
-                      <input
-                        type="hidden"
-                        value="<%= prod._id %>"
-                        name="productId"
-                      />
-                      <button
-                        class="btn btn-sm btn-danger rounded my-auto"
-                        type="submit"
-                      >
-                        X
-                      </button>
-                    </form>
-                  </td> -->
+
                 </tr>
                 <% }) %>
               </tbody>
@@ -116,29 +85,21 @@
           <% } %>
         </div>
 
-        <div class="row mt-7">
+        <div class="row mt-7 ">
           <% if(products.length > 0) { %>
           <a class="text-primary text-primary-dark-hover" href="/products">
-            Continue shopping</a
-          >
+            Continue shopping</a>
           <% } else { %>
           <a class="text-primary text-primary-dark-hover" href="/products">
-            Back to shopping</a
-          >
+            Back to shopping</a>
           <% } %>
         </div>
       </div>
       <div class="col-md-5 px-0">
-        <div
-          class="card card-body shadow-sm bg-light-gray rounded-0 border-0 px-4 py-5"
-        >
+        <div class="card card-body shadow-sm bg-light-gray rounded-0 border-0 px-4 py-5">
           <h5 class="mt-n1 text-dark text-uppercase">Summary</h5>
           <hr />
-          <form
-            class="d-flex w-100 flex-column"
-            action="/create-order"
-            method="post"
-          >
+          <form class="d-flex w-100 flex-column" action="/create-order" method="post">
             <!-- CSRF -->
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <div class="d-flex justify-content-between text-dark mt-2">
@@ -149,12 +110,8 @@
             </div>
             <div class="form-group">
               <label for="" class="text-dark text-uppercase">Shipping</label>
-              <select
-                name="method"
-                class="form-control bg-white-500 mt-2 rounded-0 py-2"
-                placeholder="Shipping"
-                aria-label="Default select example"
-              >
+              <select name="method" class="form-control bg-white-500 mt-2 rounded-0 py-2" placeholder="Shipping"
+                aria-label="Default select example">
                 <option value="standard" selected>
                   Standard Delivery - Rp. 7.000
                 </option>
@@ -174,17 +131,12 @@
             </div>
             <hr />
             <div class="d-flex">
-              <button
-                type="submit"
-                class="w-100 btn btn-primary text-white-500"
-              >
+              <button type="submit" class="w-100 btn btn-primary text-white-500">
                 Checkout
               </button>
             </div>
           </form>
-          <div
-            class="d-flex justify-content-between text-uppercase mt-4 align-items-center"
-          >
+          <div class="d-flex justify-content-between text-uppercase mt-4 align-items-center">
             <p class="my-0 fs-6">Promotional Code</p>
 
             <a href="#" class="text-decoration-none text-primary fs-4 my-0">
