@@ -7,6 +7,7 @@ const {
   sendMailVerification,
   sendMailResetPassword,
 } = require("../util/sendMail");
+const errMsgValidator = require("../util/errMsgValidator");
 
 exports.getLogin = (req, res, next) => {
   if (req.user) {
@@ -85,6 +86,13 @@ exports.getSignUp = (req, res) => {
     path: "/login",
     csrfToken: req.csrfToken(),
     flashdata: flashdata,
+    inputsVal: {
+      name: "",
+      email: "",
+      password: "",
+      password2: "",
+    },
+    errors: {},
   });
 };
 
@@ -95,41 +103,34 @@ exports.postSignUp = (req, res) => {
   const confirmPassword = req.body.password2;
 
   const errors = validationResult(req);
-  console.log(errors);
+
+  const flashdata = req.flash("flashdata");
+
+  const errMsg = errMsgValidator(errors.array());
 
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/sign-up", {
-      pageTitle: "Login | phoenix.com",
-      path: "/login",
+      pageTitle: "Sing-up | phoenix.com",
+      path: "/sing-up",
       csrfToken: req.csrfToken(),
-      // flashdata: flashdata,
-      erros: errors.array(),
+      flashdata: flashdata,
+      inputsVal: req.body,
+      errors: errMsg,
     });
   }
 
-  UserModel.findOne({
-    email: email,
-  })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash("flashdata", {
-          type: "error",
-          message: "Email already exits, please take one",
-        });
-        return res.redirect("/signup");
-      }
-      return bcrypt.hash(password, 12).then(hashedPw => {
-        const user = new UserModel({
-          name: name,
-          email: email,
-          password: hashedPw,
-          authorization: false,
-          role: "user",
-          cart: { items: [] },
-        });
-        return user.save();
-        // return true;
+  return bcrypt
+    .hash(password, 12)
+    .then(hashedPw => {
+      const user = new UserModel({
+        name: name,
+        email: email,
+        password: hashedPw,
+        authorization: false,
+        role: "user",
+        cart: { items: [] },
       });
+      return user.save();
     })
     .then(result => {
       req.flash("flashdata", {
