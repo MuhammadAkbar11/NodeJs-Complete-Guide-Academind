@@ -19,6 +19,11 @@ exports.getLogin = (req, res, next) => {
     pageTitle: "Login | phoenix.com",
     path: "/login",
     flashdata: flashdata,
+    inputsVal: {
+      email: "",
+      password: "",
+    },
+    errors: {},
   });
 };
 
@@ -30,16 +35,45 @@ exports.postLogin = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
+  const errors = validationResult(req);
+  const flashdata = req.flash("flashdata");
+  const errMsg = errMsgValidator(errors.array());
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/log-in", {
+      pageTitle: "login | phoenix.com",
+      path: "/login",
+      csrfToken: req.csrfToken(),
+      flashdata: flashdata,
+      inputsVal: req.body,
+      errors: errMsg,
+    });
+  }
+
+  // tempalate render error
+  const renderIsError = (
+    flashdataError = {
+      type: "",
+      message: "",
+    }
+  ) => {
+    res.status(422).render("auth/log-in", {
+      pageTitle: "login | phoenix.com",
+      path: "/login",
+      csrfToken: req.csrfToken(),
+      flashdata: [flashdataError],
+      inputsVal: req.body,
+      errors: errMsg,
+    });
+  };
+
   UserModel.findOne({
     email: email,
   })
     .then(user => {
+      console.log(user);
       if (!user) {
-        req.flash("flashdata", {
-          type: "error",
-          message: "Invalid email",
-        });
-        return res.redirect("/login");
+        return renderIsError({ type: "error", message: "Email not found" });
       }
 
       return bcrypt
@@ -59,11 +93,7 @@ exports.postLogin = (req, res) => {
               res.redirect("/");
             });
           }
-          req.flash("flashdata", {
-            type: "error",
-            message: "Wrong password",
-          });
-          res.redirect("/login");
+          return renderIsError({ type: "error", message: "wrong password" });
         })
         .catch(err => {
           req.flash("flashdata", {

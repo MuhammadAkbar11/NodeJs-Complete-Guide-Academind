@@ -26,11 +26,19 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <div class="mb-3">
               <label for="email" class="form-label fs-6 text-dark">E-mail</label>
-              <input type="email" name="email" class="form-control rounded-0 py-2" id="email" />
+              <input type="email" name="email" class="form-control rounded-0 py-2" id="email"
+                value="<%= inputsVal?.email? inputsVal.email : "" %>" />
+              <% if(errors && errors.email) { %>
+              <small class=" text-danger mt-3"> <%= errors.email?.message[0] %></small>
+              <% } %>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label fs-6 text-dark">Password</label>
-              <input type="password" name="password" class="form-control rounded-0 py-2" id="password" />
+              <input type="password" name="password" class="form-control rounded-0 py-2" id="password"
+                value="<%= inputsVal?.password? inputsVal.password : "" %>" />
+              <% if(errors && errors.password) { %>
+              <small class=" text-danger mt-3"> <%= errors.password?.message[0] %></small>
+              <% } %>
             </div>
             <div class="d-flex mt-4">
               <button class="btn btn-primary text-light flex-grow-1 py-2 fs-5">

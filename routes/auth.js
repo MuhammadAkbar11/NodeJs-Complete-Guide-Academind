@@ -3,10 +3,11 @@ const { check, body, checkSchema } = require("express-validator");
 const signUpValidator = require("../middleware/validators/singUpSchema");
 
 const authController = require("../controllers/auth");
+const loginValidator = require("../middleware/validators/loginSchema");
 const router = express.Router();
 
 router.get("/login", authController.getLogin);
-router.post("/login", authController.postLogin);
+router.post("/login", [loginValidator], authController.postLogin);
 router.get("/signup", authController.getSignUp);
 router.post("/signup", [signUpValidator], authController.postSignUp);
 router.post("/logout", authController.logout);
