@@ -4,6 +4,7 @@ const signUpValidator = require("../middleware/validators/singUpSchema");
 
 const authController = require("../controllers/auth");
 const loginValidator = require("../middleware/validators/loginSchema");
+const newPasswordValidator = require("../middleware/validators/newPasswordSchema");
 const router = express.Router();
 
 router.get("/login", authController.getLogin);
@@ -15,6 +16,10 @@ router.get("/forgot-password", authController.getForgotPassword);
 router.post("/forgot-password", authController.postForgotPassword);
 router.get("/forgot-password-success", authController.getForgotPasswordSuccess);
 router.get("/new-password", authController.getNewPassword);
-router.post("/new-password", authController.postNewPassword);
+router.post(
+  "/new-password",
+  [newPasswordValidator],
+  authController.postNewPassword
+);
 router.get("/authorization", authController.authorization);
 module.exports = router;

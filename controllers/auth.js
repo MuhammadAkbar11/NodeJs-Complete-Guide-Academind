@@ -288,6 +288,7 @@ exports.postForgotPassword = (req, res) => {
 exports.getNewPassword = (req, res) => {
   const token = req.query.token;
   const flashdata = req.flash("flashdata");
+  const errors = req.flash("errors")[0];
   UserModel.findOne({
     resetToken: token,
   })
@@ -305,6 +306,7 @@ exports.getNewPassword = (req, res) => {
             path: "/new-password",
             csrfToken: req.csrfToken(),
             flashdata: flashdata,
+            errors: errors,
             user: user,
           });
         } else {
@@ -319,49 +321,69 @@ exports.getNewPassword = (req, res) => {
     .catch(err => console.log(err));
 };
 exports.postNewPassword = (req, res) => {
-  console.log(req.body, "post");
   const userId = req.body.userId.trim();
   const newPassword = req.body.password.trim();
   const confirmPassword = req.body.password2.trim();
   const passwordToken = req.body.passwordToken.trim();
   let resetUser;
-  UserModel.findOne({
-    _id: userId,
-    resetToken: passwordToken,
-    resetTokenExp: { $gt: Date.now() },
-  })
-    .then(user => {
-      resetUser = user;
-      return bcrypt.hash(newPassword, 12);
-    })
-    .then(hashedPw => {
-      if (resetUser !== null) {
-        resetUser.password = hashedPw;
-        (resetUser.resetToken = undefined),
-          (resetUser.resetTokenExp = undefined);
-        return resetUser.save();
-      } else {
-        req.flash("flashdata", {
-          type: "error",
-          message: "Failed to set your new password",
-        });
-        return res.redirect("/new-password");
-      }
-    })
-    .then(result => {
-      req.flash("flashdata", {
-        type: "success",
-        message: "Success to set new password",
-      });
-      return res.redirect("/login");
-    })
-    .catch(err => {
+
+  const errors = validationResult(req);
+
+  const errMsg = errMsgValidator(errors.array());
+
+  if (!errors.isEmpty()) {
+    req.flash("errors", {
+      ...errMsg,
+    });
+    return res.redirect(`new-password?token=${passwordToken}`);
+  } else {
+    if (newPassword !== confirmPassword) {
+      console.log("true");
       req.flash("flashdata", {
         type: "error",
-        message: "Sorry, something wrong",
+        message: "Password do not match!",
       });
-      return res.redirect("/new-password");
-    });
+      return res.redirect(`new-password?token=${passwordToken}`);
+    }
+
+    return UserModel.findOne({
+      _id: userId,
+      resetToken: passwordToken,
+      resetTokenExp: { $gt: Date.now() },
+    })
+      .then(user => {
+        resetUser = user;
+        return bcrypt.hash(newPassword, 12);
+      })
+      .then(hashedPw => {
+        if (resetUser !== null) {
+          resetUser.password = hashedPw;
+          resetUser.resetToken = undefined;
+          resetUser.resetTokenExp = undefined;
+          return resetUser.save();
+        } else {
+          req.flash("flashdata", {
+            type: "error",
+            message: "Failed to set your new password",
+          });
+          return res.redirect(`new-password?token=${passwordToken}`);
+        }
+      })
+      .then(result => {
+        req.flash("flashdata", {
+          type: "success",
+          message: "Success to set new password",
+        });
+        return res.redirect("/login");
+      })
+      .catch(err => {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Sorry, something wrong",
+        });
+        return res.redirect(`new-password?token=${passwordToken}`);
+      });
+  }
 };
 
 exports.logout = (req, res) => {
