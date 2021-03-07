@@ -1,3 +1,4 @@
+@import "./utils/spacing";
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
@@ -5,13 +6,11 @@
 @import "./utils/variables";
 @import "./utils/utilities";
 
-
 @import "~bootstrap/scss/bootstrap";
 
 @import "./layouts/phoenix.layout";
 @import "./components/card";
 @import "./components/inputs";
 
-@import "./utils/spacing";
 @import "./utils/sizes";
 @import "./utils/typography";
