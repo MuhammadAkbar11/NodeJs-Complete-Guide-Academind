@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 const UserModel = require("../models/userModel");
@@ -123,7 +124,7 @@ exports.postSignUp = (req, res) => {
       });
       res.redirect("/login");
       return sendMailVerification({
-        fromName: "phoenix",
+        fromName: "Phoenix Production",
         to: email,
         subject: "Verify your email!",
       })
@@ -197,26 +198,81 @@ exports.postForgotPassword = (req, res) => {
     res.redirect("/forgot-password");
   }
 
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+
+      return res.redirect("/forgot-password");
+    }
+
+    const token = buffer.toString("hex");
+    UserModel.findOne({
+      email: email,
+    })
+      .then(user => {
+        if (user === null) {
+          req.flash("flashdata", {
+            type: "error",
+            message: "No account with that email found",
+          });
+          return res.redirect("/forgot-password");
+        } else {
+          user.resetToken = token;
+          user.resetTokenExp = Date.now() + 3600000;
+
+          return user.save();
+        }
+      })
+      .then(result => {
+        if (result) {
+          res.redirect("/forgot-password-success");
+          return sendMailResetPassword({
+            fromName: "Phoenix Production",
+            to: email,
+            subject: "Password Reset",
+            token: token,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+};
+
+exports.getResetPassword = (req, res) => {
+  const token = req.query.token;
+  const flashdata = req.flash("flashdata");
   UserModel.findOne({
-    email: email,
+    resetToken: token,
   })
-    .then(result => {
-      if (result === null) {
+    .then(user => {
+      if (!user) {
         req.flash("flashdata", {
           type: "error",
-          message: "Email not found",
+          message: "Invalid token",
         });
-        res.redirect("/forgot-password");
-      } else {
-        res.redirect("/forgot-password-success");
-        return sendMailResetPassword({
-          fromName: "Phoenix Production",
-          to: email,
-          subject: "Reset password",
-        });
+        return res.redirect("/login");
       }
+      if (!user.resetTokenExp > Date.now()) {
+        req.flash("flashdata", {
+          type: "error",
+          message: "token is expaired",
+        });
+        return res.redirect("/login");
+      }
+      res.render("auth/reset-password", {
+        pageTitle: "New password | phoenix.com",
+        path: "/reset-password",
+        csrfToken: req.csrfToken(),
+        flashdata: flashdata,
+        user: user,
+      });
     })
     .catch(err => console.log(err));
+};
+exports.postUpdatePassword = (req, res) => {
+  console.log(req.body);
 };
 
 exports.logout = (req, res) => {
