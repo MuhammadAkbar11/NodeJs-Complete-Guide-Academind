@@ -46,6 +46,7 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express-session": "^1.17.1",
+    "express-validator": "^6.10.0",
     "feather-icons": "^4.28.0",
     "mongoose": "^5.11.18",
     "nodemailer": "^6.5.0",

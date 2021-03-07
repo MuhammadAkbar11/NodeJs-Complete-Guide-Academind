@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 
 const UserModel = require("../models/userModel");
 const {
@@ -92,6 +93,19 @@ exports.postSignUp = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.password2;
+
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/sign-up", {
+      pageTitle: "Login | phoenix.com",
+      path: "/login",
+      csrfToken: req.csrfToken(),
+      // flashdata: flashdata,
+      erros: errors.array(),
+    });
+  }
 
   UserModel.findOne({
     email: email,
