@@ -16,6 +16,7 @@ const mailOptions = {
   fromName: "",
   to: "",
   subject: "",
+  token: "",
 };
 
 exports.sendMailVerification = async (options = mailOptions) => {
@@ -43,7 +44,10 @@ exports.sendMailResetPassword = async (options = mailOptions) => {
     path.resolve(__dirname, "../views/email-reset-password.ejs"),
     "ascii"
   );
-  const rendered = ejs.render(file, { email: options.to });
+  const rendered = ejs.render(file, {
+    email: options.to,
+    token: options.token,
+  });
 
   const message = {
     from: `${options.fromName} phoenix.production98@gmail.com`,
