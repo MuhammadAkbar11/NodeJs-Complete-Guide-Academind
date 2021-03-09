@@ -27,7 +27,7 @@ exports.getDetailProduct = (req, res, next) => {
         path: "/products",
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => res.redirect("/500"));
 };
 
 exports.getIndex = (req, res, next) => {
