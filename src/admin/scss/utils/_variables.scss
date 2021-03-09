@@ -20,6 +20,8 @@ $theme-colors: (
   "white-500": $gray-100,
 );
 
+$enable-negative-margins: true;
+
 $navbar-dark-color: $info;
 $navbar-dark-toggler-border-color: $info;
 
