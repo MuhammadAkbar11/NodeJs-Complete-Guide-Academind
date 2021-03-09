@@ -1,5 +1,7 @@
 const ProductModel = require("../models/productModel");
 const formatRupiah = require("../util/formatRupiah");
+const { validationResult } = require("express-validator");
+const errMsgValidator = require("../util/errMsgValidator");
 
 exports.getProducts = (req, res, next) => {
   const flashdata = req.flash("flashdata");
@@ -20,6 +22,13 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: "Admin - Add Products | phoenix.com",
     path: "/admin/add-product",
     editing: false,
+    errors: {},
+    inputsValue: {
+      title: "",
+      price: "",
+      imageUrl: "",
+      description: "",
+    },
   });
 };
 
@@ -29,6 +38,20 @@ exports.postAddProducts = (req, res, next) => {
   const price = +req.body.price;
   const description = req.body.description;
   const userId = req.user._id;
+
+  const errors = validationResult(req);
+  const errMsg = errMsgValidator(errors.array());
+  if (!errors.isEmpty()) {
+    return res.status(422).render("admin/admin-form-product", {
+      pageTitle: "Admin - Add Products | phoenix.com",
+      path: "/admin/add-product",
+      editing: false,
+      inputsValue: {
+        ...req.body,
+      },
+      errors: errMsg,
+    });
+  }
 
   const insertData = {
     title: title,
@@ -74,6 +97,7 @@ exports.getEditProduct = (req, res, next) => {
       path: "/admin/edit-product",
       editing: editMode,
       product: product,
+      errors: req.flash("errors")[0],
       flashdata: flashdata,
     });
   });
@@ -83,8 +107,17 @@ exports.postEditProducts = (req, res, next) => {
   const prodId = req.body.productId;
   const inputTitle = req.body.title;
   const inputPrice = +req.body.price;
-  const inputImageUrl = req.body.imageUrl;
-  const inputDescription = req.body.description;
+  const inputImageUrl = req.body.imageUrl.trim();
+  const inputDescription = req.body.description.trim();
+
+  const errors = validationResult(req);
+  const errMsg = errMsgValidator(errors.array());
+  if (!errors.isEmpty()) {
+    req.flash("errors", {
+      ...errMsg,
+    });
+    return res.redirect(`edit-product/${prodId}?edit=true`);
+  }
 
   ProductModel.findById(prodId)
     .then(product => {

@@ -11,6 +11,7 @@ const signUpValidator = checkSchema({
     notEmpty: {
       errorMessage: "Enter youe email address",
     },
+    normalizeEmail: true,
     isEmail: {
       errorMessage: "Invalid email",
     },

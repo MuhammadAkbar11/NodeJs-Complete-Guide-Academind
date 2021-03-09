@@ -33,7 +33,10 @@
                         <label for="" class="col-form-label col-lg-4">Title</label>
                         <div class="col-lg-8">
                           <input type="text" class="form-control form-control-lg bg-transparent" name="title" id="title"
-                            value="<% if (editing) { %><%= product.title %><% } %>" />
+                            value="<% if (editing) { %><%= product.title %><% } else { %><%= inputsValue.title %><% } %>" />
+                          <% if(errors && errors.title) { %>
+                          <small class=" text-danger mt-3"> <%= errors.title?.message[0] %></small>
+                          <% } %>
                         </div>
                       </div>
                     </div>
@@ -42,7 +45,11 @@
                         <label for="" class="col-form-label col-lg-3">Price</label>
                         <div class="col-lg-9">
                           <input type="text" class="form-control form-control-lg bg-transparent" name="price" id="price"
-                            step="0.01" value="<% if (editing) { %><%= product.price.num %><% } %>" />
+                            step="0.01"
+                            value="<% if (editing) { %><%= product.price.num %><% } else { %><%= inputsValue.price %><% } %>" />
+                          <% if(errors && errors.price) { %>
+                          <small class=" text-danger mt-3"> <%= errors.price?.message[0] %></small>
+                          <% } %>
                         </div>
                       </div>
                     </div>
@@ -53,7 +60,11 @@
                         <label for="" class="col-form-label col-lg-2">ImgUrl</label>
                         <div class="col-lg-10">
                           <input type="text" class="form-control form-control-lg bg-transparent" name="imageUrl"
-                            id="imageUrl" value="<% if (editing) { %><%= product.imageUrl %><% } %>" />
+                            id="imageUrl"
+                            value="<% if (editing) { %><%= product.imageUrl %><% } else { %><%= inputsValue.imageUrl %><% } %>" />
+                          <% if(errors && errors.imageUrl) { %>
+                          <small class=" text-danger mt-3"> <%= errors.imageUrl?.message[0] %></small>
+                          <% } %>
                         </div>
                       </div>
                     </div>
@@ -63,7 +74,10 @@
                         <div class="col-lg-10">
                           <textarea name="description" id="description"
                             class="form-control form-control-lg bg-transparent" cols="30" rows="3">
-<% if (editing) { %><%= product.description %><% } %></textarea>
+<% if (editing) { %><%= product.description %><% } else { %><%= inputsValue.description %><% } %></textarea>
+                          <% if(errors && errors.description) { %>
+                          <small class=" text-danger mt-3"> <%= errors.description?.message[0] %></small>
+                          <% } %>
                         </div>
                       </div>
                     </div>

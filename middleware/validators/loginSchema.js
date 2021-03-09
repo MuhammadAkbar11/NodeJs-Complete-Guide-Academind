@@ -1,5 +1,4 @@
 const { checkSchema } = require("express-validator");
-const UserModel = require("../../models/userModel");
 
 const loginValidator = checkSchema({
   email: {
@@ -13,12 +12,6 @@ const loginValidator = checkSchema({
   password: {
     notEmpty: {
       errorMessage: "enter your password",
-    },
-    isLength: {
-      errorMessage: "Password should be at least 5 chars long",
-      options: {
-        min: 5,
-      },
     },
   },
 });

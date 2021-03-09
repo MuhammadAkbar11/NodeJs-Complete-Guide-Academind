@@ -5,6 +5,7 @@ const router = express.Router();
 
 const isAuth = require("../middleware/is-auth");
 const isAdmin = require("../middleware/is-admin");
+const formProductValidator = require("../middleware/validators/formProductShema");
 
 // router.get("/basic-page", adminController.getBasicPage);
 
@@ -14,7 +15,13 @@ router.get("/products", isAuth, isAdmin, adminController.getProducts);
 //=> /admin/add-product => GET
 router.get("/add-product", isAuth, isAdmin, adminController.getAddProduct);
 //=> /admin/add-product => POST
-router.post("/add-product", isAuth, isAdmin, adminController.postAddProducts);
+router.post(
+  "/add-product",
+  [formProductValidator],
+  isAuth,
+  isAdmin,
+  adminController.postAddProducts
+);
 
 router.get(
   "/edit-product/:productId",
@@ -25,6 +32,7 @@ router.get(
 
 router.post(
   "/edit-product/",
+  [formProductValidator],
   isAuth,
   isAdmin,
   adminController.postEditProducts
