@@ -35,8 +35,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
-    secret: "phoenix secret",
-    resave: false,
+    cookie: {
+      expires: 24 * 60 * 60 * 7,
+      maxAge: 24 * 60 * 60 * 365 * 1000,
+    },
+    secret: process.env.SESSION_SECRET,
+    resave: true,
     unset: "destroy",
     saveUninitialized: false,
     store: store,
