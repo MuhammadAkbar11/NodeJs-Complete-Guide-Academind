@@ -51,6 +51,19 @@ app.use(csrufProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  if (req.user) {
+    res.locals.user = req.user;
+  } else {
+    res.locals.user = null;
+  }
+
+  next();
+});
+
+app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
@@ -71,19 +84,6 @@ app.use((req, res, next) => {
     });
 });
 
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  if (req.user) {
-    res.locals.user = req.user;
-  } else {
-    res.locals.user = null;
-  }
-
-  next();
-});
-
 app.use("/admin", adminRoutes);
 app.use(authRoutes);
 app.use(shopRoutes);
@@ -93,7 +93,7 @@ app.use("/500", errorController.get500);
 app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
-  res.redirect("/500");
+  res.status(500).render("500", { pageTitle: "Something Error", path: "/500" });
 });
 
 // eslint-disable-next-line no-undef
