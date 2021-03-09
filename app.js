@@ -56,13 +56,19 @@ app.use((req, res, next) => {
   }
 
   UserModel.findOne({
-    email: req.session?.user?.email,
+    email: req.session.user?.email,
   })
     .then(user => {
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      throw new Error(err);
+      // next();
+    });
 });
 
 app.use((req, res, next) => {
