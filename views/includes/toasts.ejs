@@ -1,22 +1,12 @@
-<div
-  class="toast toast-flash bg-<%= flashdata.type %>"
-  role="alert"
-  aria-live="assertive"
-  aria-atomic="true"
-  style="opacity: 1"
->
+<div class="toast toast-flash bg-light shadow-sm" role="alert" aria-live="assertive" aria-atomic="true"
+  style="opacity: 1">
   <!-- toast header -->
-  <div class="toast-header bg-<%= flashdata.type %> text-light">
+  <div class="toast-header bg-light text-<%= flashdata.type %>">
     <i data-feather="check-circle"></i>
-    <strong class="me-auto ms-2">Success!</strong>
+    <strong class="me-auto ms-2 ">Success!</strong>
     <small class="">now</small>
 
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="toast"
-      aria-label="Close"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
-  <div class="toast-body text-light"><%= flashdata.message %></div>
+  <div class="toast-body text-<%= flashdata.type %>"><%= flashdata.message %></div>
 </div>

@@ -1,21 +1,10 @@
-<div
-  class="toast toast-flash bg-danger"
-  role="alert"
-  aria-live="assertive"
-  aria-atomic="true"
-  style="opacity: 1"
->
+<div class="toast toast-flash bg-light" role="alert" aria-live="assertive" aria-atomic="true" style="opacity: 1">
   <!-- toast header -->
-  <div class="toast-header bg-danger text-light">
+  <div class="toast-header bg-light text-danger">
     <i data-feather="x-circle"></i>
     <strong class="me-auto ms-2">Opps!</strong>
     <small class="">now</small>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="toast"
-      aria-label="Close"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
-  <div class="toast-body text-light"><%= flashdata.message %></div>
+  <div class="toast-body text-danger"><%= flashdata.message %></div>
 </div>
