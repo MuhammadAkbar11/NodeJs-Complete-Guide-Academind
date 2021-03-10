@@ -23,6 +23,15 @@ const store = new MongoDBStore({
 
 const csrufProtection = Csurf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/uploads/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -31,13 +40,15 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  multer({
-    dest: path.resolve(__dirname, "assets/images"),
-  }).single("image")
-);
+
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  multer({
+    storage: fileStorage,
+  }).single("image")
+);
 
 app.use(
   session({
