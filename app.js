@@ -56,19 +56,6 @@ app.use(csrufProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  if (req.user) {
-    res.locals.user = req.user;
-  } else {
-    res.locals.user = null;
-  }
-
-  next();
-});
-
-app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
@@ -88,6 +75,19 @@ app.use((req, res, next) => {
       throw new Error(err);
       // next();
     });
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  if (req.user) {
+    res.locals.user = req.user;
+  } else {
+    res.locals.user = null;
+  }
+
+  next();
 });
 
 app.use("/admin", adminRoutes);
