@@ -9,7 +9,7 @@ const IncNumbersModel = require("../models/incNumbers");
 
 const formatRupiah = require("../util/formatRupiah");
 
-const PRODUCT_PER_PAGE = 5;
+const PRODUCT_PER_PAGE = 8;
 
 exports.getProducts = (req, res, next) => {
   ProductModel.find()
@@ -38,14 +38,11 @@ exports.getDetailProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  let page = req.query.page;
+  let page = +req.query.page || 1;
 
   let currentPage;
   let totalItems;
 
-  if (page === undefined) {
-    page = 1;
-  }
   currentPage = page;
 
   ProductModel.find()
