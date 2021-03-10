@@ -3,6 +3,7 @@ const ProductModel = require("../models/productModel");
 const formatRupiah = require("../util/formatRupiah");
 const { validationResult } = require("express-validator");
 const errMsgValidator = require("../util/errMsgValidator");
+const fileHelper = require("../util/file");
 
 exports.getProducts = (req, res, next) => {
   const flashdata = req.flash("flashdata");
@@ -134,9 +135,11 @@ exports.postEditProducts = (req, res, next) => {
 
   ProductModel.findById(prodId)
     .then(product => {
-      let imagePath = `/${image.data?.path}`;
-      if (image.data === null) {
-        imagePath = product.imageUrl;
+      let imagePath = product.imageUrl;
+
+      if (image.data !== null) {
+        fileHelper.deleteFile(product.imageUrl.substring(1));
+        imagePath = `/${image.data?.path}`;
       }
       const updatedData = {
         title: inputTitle,
@@ -179,7 +182,19 @@ exports.postDeleteProduct = (req, res, next) => {
     });
   }
 
-  ProductModel.findByIdAndRemove(prodId)
+  ProductModel.findById(prodId)
+    .then(product => {
+      if (!product) {
+        req.flash("flashdata", {
+          type: "success",
+          message: "Success deleting product",
+        });
+        res.redirect("/admin/products");
+        return;
+      }
+      fileHelper.deleteFile(product.imageUrl.substring(1));
+      return ProductModel.findByIdAndRemove(prodId);
+    })
     .then(() => {
       req.flash("flashdata", {
         type: "success",
@@ -194,17 +209,3 @@ exports.postDeleteProduct = (req, res, next) => {
       });
     });
 };
-
-// // basic page
-
-// exports.getBasicPage = (req, res, next) => {
-//   req.user
-//     .getProducts()
-//     .then(products => {
-//       res.render("admin/admin-basic-page", {
-//         pageTitle: "Admin - Basic Page | phoenix.com  💌  ",
-//         path: "/admin/basic-page",
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
