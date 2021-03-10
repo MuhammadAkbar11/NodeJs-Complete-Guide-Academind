@@ -1,7 +1,7 @@
 {
-  "name": "bagian_15__sending-email",
+  "name": "bagian_19__file-upload-and-download",
   "version": "1.1.0",
-  "description": "Tutorial Bagian 15 Sending Email",
+  "description": "Tutorial Bagian 19 upload file dan mendowload",
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",
@@ -49,6 +49,7 @@
     "express-validator": "^6.10.0",
     "feather-icons": "^4.28.0",
     "mongoose": "^5.11.18",
+    "multer": "^1.4.2",
     "nodemailer": "^6.5.0",
     "postcss": "^8.2.6",
     "postcss-loader": "^5.0.0",
