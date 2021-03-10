@@ -1,5 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+
+const PDFdocument = require("pdfkit");
+
 const ProductModel = require("../models/productModel");
 const OrderModel = require("../models/orderModel");
 const IncNumbersModel = require("../models/incNumbers");
@@ -214,24 +217,16 @@ exports.getInvoice = (req, res, next) => {
       }
       const invoiceName = `Invoice-${orderId}.pdf`;
       const invoicePath = path.join("data", "invoices", invoiceName);
-      console.log(invoicePath);
-      // fs.readFile(invoicePath, (err, data) => {
-      //   if (err) {
-      //     console.log(err);
-      //     return next();
-      //   }
-      //
-      //
-      // });
-      const file = fs.createReadStream(invoicePath);
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
-        "Content-Dispostion",
+        "Content-Disposition",
         'inline; filename="' + invoiceName + '"'
       );
-      // inline untuk lihat langsung
-      // attachment untk download
-      file.pipe(res);
+      const pdfDoc = new PDFdocument();
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
+      pdfDoc.text("Hello World");
+      pdfDoc.end();
     })
     .catch(err => next(err));
 };
