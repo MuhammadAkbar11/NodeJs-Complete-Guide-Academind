@@ -215,19 +215,23 @@ exports.getInvoice = (req, res, next) => {
       const invoiceName = `Invoice-${orderId}.pdf`;
       const invoicePath = path.join("data", "invoices", invoiceName);
       console.log(invoicePath);
-      fs.readFile(invoicePath, (err, data) => {
-        if (err) {
-          console.log(err);
-          return next();
-        }
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader(
-          "Content-Dispostion",
-          'inline; filename="' + invoiceName + '"'
-        ); // inline untuk lihat langsung
-        // attachment untk download
-        res.send(data);
-      });
+      // fs.readFile(invoicePath, (err, data) => {
+      //   if (err) {
+      //     console.log(err);
+      //     return next();
+      //   }
+      //
+      //
+      // });
+      const file = fs.createReadStream(invoicePath);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Dispostion",
+        'inline; filename="' + invoiceName + '"'
+      );
+      // inline untuk lihat langsung
+      // attachment untk download
+      file.pipe(res);
     })
     .catch(err => next(err));
 };
