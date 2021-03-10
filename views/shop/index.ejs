@@ -34,22 +34,13 @@
       <div class="col-lg-3 col-md-4 pl-0 mb-3 phx-card-stretch">
         <div class="card phx-card-product bg-transparent">
           <div class="phx-img-product">
-            <img
-              src="<%= product.imageUrl %>"
-              class="card-img-top"
-              alt=" ..."
-            />
+            <img src="<%= product.imageUrl %>" class="card-img-top" alt=" ..." />
           </div>
           <div class="card-body d-flex flex-column">
-            <h5
-              title="<%= product.title %>"
-              class="card-title overflow-hidden w-100 text-nowrap text-ellipsis"
-            >
+            <h5 title="<%= product.title %>" class="card-title overflow-hidden w-100 text-nowrap text-ellipsis">
               <%= product.title %>
             </h5>
-            <span class="text-primary phx-rupiah mb-2"
-              ><%= product.price.rupiah %></span
-            >
+            <span class="text-primary phx-rupiah mb-2"><%= product.price.rupiah %></span>
             <p class="overflow-hidden w-100 text-nowrap text-ellipsis">
               <%= product.description %>
             </p>
@@ -58,13 +49,30 @@
               <% if (isAuthenticated) { %> <%-
               include('../includes/add-to-cart.ejs', {product: product,
               className: "mt-auto"}) %> <% } %>
-              <a
-                href="/products/<%= product._id %>"
-                class="btn btn-outline-primary text-white-500-hover"
-                >Detail</a
-              >
+              <a href="/products/<%= product._id %>" class="btn btn-outline-primary text-white-500-hover">Detail</a>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row ">
+        <div class="col-md-6 mx-auto">
+          <nav aria-label="Page navigation example " class=" d-flex justify-content-center ">
+            <ul class="pagination mx-auto  gap-4">
+              <li class="page-item disabled">
+                <a class="page-link bg-transparent border-0 text-muted" href="#" aria-label="Previous" tabindex="-1"
+                  aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>
+              </li>
+
+              <li class="page-item "><a class="page-link bg-primary border-0 text-light " href="#">1</a></li>
+              <li class="page-item "><a class="page-link bg-transparent border-0 text-primary" href="#">2</a></li>
+              <li class="page-item "><a class="page-link bg-transparent border-0 text-primary" href="#">3</a></li>
+              <li class="page-item ">
+                <a class="page-link bg-transparent border-0 text-primary" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <% } %> <% } else { %>
