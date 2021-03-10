@@ -34,6 +34,7 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(upload);
 
@@ -84,7 +85,7 @@ app.use((req, res, next) => {
     })
     .catch(err => {
       console.log(err);
-      throw new Error(err);
+      // throw new Error(err);
       // next();
     });
 });
@@ -97,9 +98,9 @@ app.use("/500", errorController.get500);
 
 app.use(errorController.get404);
 
-app.use((error, req, res, next) => {
-  res.status(500).render("500", { pageTitle: "Something Error", path: "/500" });
-});
+// app.use((error, req, res, next) => {
+//   res.status(500).render("500", { pageTitle: "Something Error", path: "/500" });
+// });
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;

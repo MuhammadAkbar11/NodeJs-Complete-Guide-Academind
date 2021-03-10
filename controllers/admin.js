@@ -70,7 +70,7 @@ exports.postAddProducts = (req, res, next) => {
       rupiah: formatRupiah(price),
     },
     description: description,
-    imageUrl: image.data?.path,
+    imageUrl: `/${image.data?.path}`,
     createdAt: new Date(),
     userId: userId,
   };
@@ -134,7 +134,7 @@ exports.postEditProducts = (req, res, next) => {
 
   ProductModel.findById(prodId)
     .then(product => {
-      let imagePath = image.data?.path;
+      let imagePath = `/${image.data?.path}`;
       if (image.data === null) {
         imagePath = product.imageUrl;
       }
