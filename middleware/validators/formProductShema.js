@@ -16,15 +16,15 @@ const formProductValidator = checkSchema({
     },
     trim: true,
   },
-  imageUrl: {
-    notEmpty: {
-      errorMessage: "Required Field",
-    },
-    isURL: {
-      errorMessage: "Invalid Url",
-    },
-    trim: true,
-  },
+  // imageUrl: {
+  //   notEmpty: {
+  //     errorMessage: "Required Field",
+  //   },
+  //   isURL: {
+  //     errorMessage: "Invalid Url",
+  //   },
+  //   trim: true,
+  // },
   description: {
     notEmpty: {
       errorMessage: "Required Field",
