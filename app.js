@@ -12,6 +12,7 @@ const flash = require("connect-flash");
 
 const errorController = require("./controllers/error");
 const UserModel = require("./models/userModel");
+const { upload } = require("./middleware/upload");
 
 const MONGODB_URI = process.env.URL;
 
@@ -23,27 +24,6 @@ const store = new MongoDBStore({
 
 const csrufProtection = Csurf();
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./public/uploads/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mineType === "image/png" ||
-    file.mineType === "image/jpg" ||
-    file.mineType === "image/jped"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, flase);
-  }
-};
-
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -52,16 +32,10 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-  multer({
-    storage: fileStorage,
-    fileFilter: fileFilter,
-  }).single("image")
-);
+app.use(upload);
 
 app.use(
   session({
@@ -81,6 +55,19 @@ app.use(csrufProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+
+  if (req.user) {
+    res.locals.user = req.user;
+  } else {
+    res.locals.user = null;
+  }
+
+  next();
+});
+
+app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
@@ -98,19 +85,8 @@ app.use((req, res, next) => {
     .catch(err => {
       console.log(err);
       throw new Error(err);
+      // next();
     });
-});
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-
-  if (req.user) {
-    res.locals.user = req.user;
-  } else {
-    res.locals.user = null;
-  }
-  next();
 });
 
 app.use("/admin", adminRoutes);

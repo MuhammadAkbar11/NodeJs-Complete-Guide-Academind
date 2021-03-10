@@ -1,3 +1,4 @@
+const multer = require("multer");
 const ProductModel = require("../models/productModel");
 const formatRupiah = require("../util/formatRupiah");
 const { validationResult } = require("express-validator");
@@ -27,7 +28,6 @@ exports.getAddProduct = (req, res, next) => {
     inputsValue: {
       title: "",
       price: "",
-      imageUrl: "",
       description: "",
     },
   });
@@ -35,23 +35,20 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
   const title = req.body.title;
-  const image = req.file;
+  const image = req.fileimg;
   const price = +req.body.price;
   const description = req.body.description;
   const userId = req.user._id;
 
-  let imageValidate = {
-    value: "",
-    msg: "Upload the image",
-    param: "image",
-    location: "file",
-  };
-
   const errors = validationResult(req);
 
-  console.log(image);
-  if (image === undefined) {
-    errors.errors.push(imageValidate);
+  if (image.type === "error") {
+    errors.errors.push({
+      value: "",
+      msg: image.message,
+      param: "image",
+      location: "file",
+    });
   }
   const errMsg = errMsgValidator(errors.array());
   if (!errors.isEmpty()) {
@@ -73,12 +70,11 @@ exports.postAddProducts = (req, res, next) => {
       rupiah: formatRupiah(price),
     },
     description: description,
-    image: image,
+    imageUrl: image.data?.path,
     createdAt: new Date(),
     userId: userId,
   };
   const product = new ProductModel(insertData);
-
   product
     .save()
     .then(result => {
@@ -124,7 +120,7 @@ exports.postEditProducts = (req, res, next) => {
   const prodId = req.body.productId;
   const inputTitle = req.body.title;
   const inputPrice = +req.body.price;
-  const inputImageUrl = req.body.imageUrl.trim();
+  const image = req.fileimg;
   const inputDescription = req.body.description.trim();
 
   const errors = validationResult(req);
@@ -138,6 +134,10 @@ exports.postEditProducts = (req, res, next) => {
 
   ProductModel.findById(prodId)
     .then(product => {
+      let imagePath = image.data?.path;
+      if (image.data === null) {
+        imagePath = product.imageUrl;
+      }
       const updatedData = {
         title: inputTitle,
         price: {
@@ -145,7 +145,7 @@ exports.postEditProducts = (req, res, next) => {
           rupiah: formatRupiah(inputPrice),
         },
         description: inputDescription,
-        imageUrl: inputImageUrl,
+        imageUrl: imagePath,
       };
 
       return product.updateOne(
