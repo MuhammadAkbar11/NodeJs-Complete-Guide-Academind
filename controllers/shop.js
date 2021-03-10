@@ -41,19 +41,29 @@ exports.getIndex = (req, res, next) => {
   let page = req.query.page;
 
   let currentPage;
+  let totalItems;
 
   if (page === undefined) {
     page = 1;
   }
   currentPage = page;
+
   ProductModel.find()
-    .skip((currentPage - 1) * PRODUCT_PER_PAGE)
-    .limit(PRODUCT_PER_PAGE)
+    .countDocuments()
+    .then(productsCount => {
+      totalItems = productsCount;
+      return ProductModel.find()
+        .skip((currentPage - 1) * PRODUCT_PER_PAGE)
+        .limit(PRODUCT_PER_PAGE);
+    })
     .then(products => {
-      console.log(products);
       res.render("shop/index", {
         prods: products,
         currentPage: currentPage,
+        totalProducts: totalItems,
+        hasNextPage: PRODUCT_PER_PAGE * +currentPage < totalItems,
+        hasPreviousPage: currentPage > 1,
+        lastPage: Math.ceil(totalItems / PRODUCT_PER_PAGE),
         pageTitle: "Home | phoenix.com",
         path: "/",
       });

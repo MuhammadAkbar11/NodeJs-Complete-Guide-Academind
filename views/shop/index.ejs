@@ -60,18 +60,12 @@
         <div class="col-md-6 mx-auto">
           <nav aria-label="Page navigation example " class=" d-flex justify-content-center ">
             <ul class="pagination mx-auto  gap-4">
-              <% if(currentPage > 1) { %>
+              <% if(hasPreviousPage) { %>
               <li class="page-item ">
                 <a class="page-link bg-transparent border-0 text-primary bg-primary-hover text-light-hover"
                   href="?page=<%= +currentPage - 1 %>#pagination" aria-label="Previous">
                   <span aria-hidden="true">&laquo;
                   </span>
-                </a>
-              </li>
-              <% } else { %>
-              <li class="page-item disabled">
-                <a class="page-link bg-transparent border-0 text-muted" href="#" aria-label="Previous" tabindex="-1"
-                  aria-disabled="true"><span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
               <% } %>
@@ -84,12 +78,15 @@
               <li class="page-item "><a
                   class="page-link border-0 <%= currentPage == 3 ? "bg-primary text-light" : "bg-transparent text-primary bg-primary-hover text-light-hover" %> "
                   href="?page=3#pagination">3</a></li>
+              <% if(hasNextPage) { %>
               <li class="page-item ">
                 <a class="page-link border-0 bg-transparent text-primary bg-primary-hover text-light-hover"
                   href="?page=<%= +currentPage + 1%>#pagination" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
+              <% } %>
+
             </ul>
           </nav>
         </div>
