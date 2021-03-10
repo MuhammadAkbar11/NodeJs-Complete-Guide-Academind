@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const ProductModel = require("../models/productModel");
 const OrderModel = require("../models/orderModel");
 const IncNumbersModel = require("../models/incNumbers");
@@ -193,4 +195,24 @@ exports.getOrders = (req, res, next) => {
       });
     })
     .catch(err => console.log(err));
+};
+
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  const invoiceName = `Invoice-${orderId}.pdf`;
+  const invoicePath = path.join("data", "invoices", invoiceName);
+  console.log(invoicePath);
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) {
+      console.log(err);
+      return next();
+    }
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Dispostion",
+      'inline; filename="' + invoiceName + '"'
+    ); // inline untuk lihat langsung
+    // attachment untk download
+    res.send(data);
+  });
 };
