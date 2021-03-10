@@ -32,6 +32,18 @@ const fileStorage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mineType === "image/png" ||
+    file.mineType === "image/jpg" ||
+    file.mineType === "image/jped"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, flase);
+  }
+};
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -47,6 +59,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   multer({
     storage: fileStorage,
+    fileFilter: fileFilter,
   }).single("image")
 );
 
