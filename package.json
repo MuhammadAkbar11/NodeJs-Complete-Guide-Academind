@@ -1,7 +1,7 @@
 {
   "name": "bagian_20__adding-pagination",
   "version": "1.1.1",
-  "description": "Tutorial Bagian 19 upload file dan mendowload",
+  "description": "Tutorial Bagian 20 menambahkan pagination",
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",

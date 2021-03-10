@@ -9,6 +9,8 @@ const IncNumbersModel = require("../models/incNumbers");
 
 const formatRupiah = require("../util/formatRupiah");
 
+const PRODUCT_PER_PAGE = 5;
+
 exports.getProducts = (req, res, next) => {
   ProductModel.find()
     .then(products => {
@@ -36,10 +38,22 @@ exports.getDetailProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+  let page = req.query.page;
+
+  let currentPage;
+
+  if (page === undefined) {
+    page = 1;
+  }
+  currentPage = page;
   ProductModel.find()
+    .skip((currentPage - 1) * PRODUCT_PER_PAGE)
+    .limit(PRODUCT_PER_PAGE)
     .then(products => {
+      console.log(products);
       res.render("shop/index", {
         prods: products,
+        currentPage: currentPage,
         pageTitle: "Home | phoenix.com",
         path: "/",
       });

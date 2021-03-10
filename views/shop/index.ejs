@@ -28,7 +28,7 @@
       </h5>
     </div>
 
-    <div class="row mt-4 mb-4">
+    <div class="row mt-4 mb-4" id="products">
       <% if (prods.length > 0) { %> <% let no = 1 %> <% for (const product of
       prods) { %>
       <div class="col-lg-3 col-md-4 pl-0 mb-3 phx-card-stretch">
@@ -54,20 +54,39 @@
           </div>
         </div>
       </div>
-      <div class="row ">
+
+      <% } %>
+      <div class="row mt-5 " id="pagination">
         <div class="col-md-6 mx-auto">
           <nav aria-label="Page navigation example " class=" d-flex justify-content-center ">
             <ul class="pagination mx-auto  gap-4">
+              <% if(currentPage > 1) { %>
+              <li class="page-item ">
+                <a class="page-link bg-transparent border-0 text-primary bg-primary-hover text-light-hover"
+                  href="?page=<%= +currentPage - 1 %>#pagination" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;
+                  </span>
+                </a>
+              </li>
+              <% } else { %>
               <li class="page-item disabled">
                 <a class="page-link bg-transparent border-0 text-muted" href="#" aria-label="Previous" tabindex="-1"
-                  aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>
+                  aria-disabled="true"><span aria-hidden="true">&laquo;</span>
+                </a>
               </li>
-
-              <li class="page-item "><a class="page-link bg-primary border-0 text-light " href="#">1</a></li>
-              <li class="page-item "><a class="page-link bg-transparent border-0 text-primary" href="#">2</a></li>
-              <li class="page-item "><a class="page-link bg-transparent border-0 text-primary" href="#">3</a></li>
+              <% } %>
+              <li class="page-item "><a
+                  class="page-link border-0 <%= currentPage == 1 ? "bg-primary text-light" : "bg-transparent text-primary bg-primary-hover text-light-hover" %> "
+                  href="?page=1#pagination">1</a></li>
+              <li class="page-item "><a
+                  class="page-link border-0 <%= currentPage == 2 ? "bg-primary text-light" : "bg-transparent text-primary bg-primary-hover text-light-hover" %> "
+                  href="?page=2#pagination">2</a></li>
+              <li class="page-item "><a
+                  class="page-link border-0 <%= currentPage == 3 ? "bg-primary text-light" : "bg-transparent text-primary bg-primary-hover text-light-hover" %> "
+                  href="?page=3#pagination">3</a></li>
               <li class="page-item ">
-                <a class="page-link bg-transparent border-0 text-primary" href="#" aria-label="Next">
+                <a class="page-link border-0 bg-transparent text-primary bg-primary-hover text-light-hover"
+                  href="?page=<%= +currentPage + 1%>#pagination" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
@@ -75,9 +94,10 @@
           </nav>
         </div>
       </div>
-      <% } %> <% } else { %>
-      <div class="col-12">
-        <h1>Product is Empty</h1>
+      <% } else { %>
+      <div class="col-sm-12 text-center mt-2  mt-sm-5 d-flex justify-content-center align-content-center "
+        style="min-height: 200px;">
+        <h1 class="text-dark-gray">Product is Empty</h1>
       </div>
       <% } %>
     </div>
