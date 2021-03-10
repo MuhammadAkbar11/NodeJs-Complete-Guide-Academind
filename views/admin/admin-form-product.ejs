@@ -22,7 +22,8 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-12">
-                <form action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+                <form action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST"
+                  enctype="multipart/form-data">
                   <div class="row mb-3">
                     <div class="col-lg-6">
                       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -55,7 +56,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <!-- <div class="col-md-12 mb-3">
                       <div class="form-group row">
                         <label for="" class="col-form-label col-lg-2">ImgUrl</label>
                         <div class="col-lg-10">
@@ -67,8 +68,8 @@
                           <% } %>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-md-12">
+                    </div> -->
+                    <div class="col-md-12 mb-3">
                       <div class="form-group row">
                         <label for="" class="col-form-label col-lg-2">Description</label>
                         <div class="col-lg-10">
@@ -78,6 +79,26 @@
                           <% if(errors && errors.description) { %>
                           <small class=" text-danger mt-3"> <%= errors.description?.message[0] %></small>
                           <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <div class="form-group row">
+                        <label for="image" class="col-form-label col-lg-2">Image</label>
+                        <div class="col-lg-10">
+                          <% if (editing) { %>
+                          <div class="row d-flex">
+                            <div class="col-md-7 col-lg-8 order-2 d-flex align-items-center">
+                              <input class="form-control bg-transparent my-auto" type="file" name="image" id="image">
+                            </div>
+                            <div class="col-md-5 col-lg-4 order-1">
+                              <img src="http://localhost/local-clouds/assets/phoenix-shop/chair2.png" class="w-100"
+                                height="200" alt="">
+                            </div>
+                          </div>
+                          <% } else { %>
+                          <input class="form-control bg-transparent " type="file" name="image" id="image">
+                          <% }  %>
                         </div>
                       </div>
                     </div>
