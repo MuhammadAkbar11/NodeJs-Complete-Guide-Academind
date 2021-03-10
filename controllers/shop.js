@@ -199,20 +199,35 @@ exports.getOrders = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
-  const invoiceName = `Invoice-${orderId}.pdf`;
-  const invoicePath = path.join("data", "invoices", invoiceName);
-  console.log(invoicePath);
-  fs.readFile(invoicePath, (err, data) => {
-    if (err) {
-      console.log(err);
-      return next();
-    }
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Dispostion",
-      'inline; filename="' + invoiceName + '"'
-    ); // inline untuk lihat langsung
-    // attachment untk download
-    res.send(data);
-  });
+  OrderModel.findById(orderId)
+    .then(order => {
+      if (!order) {
+        return next(new Error("No order found!"));
+      }
+
+      if (order.user.userId.toString() !== req.user._id.toString()) {
+        req.flash("flashdata", {
+          type: "error",
+          message: "Unauthorized",
+        });
+        return res.redirect("/login");
+      }
+      const invoiceName = `Invoice-${orderId}.pdf`;
+      const invoicePath = path.join("data", "invoices", invoiceName);
+      console.log(invoicePath);
+      fs.readFile(invoicePath, (err, data) => {
+        if (err) {
+          console.log(err);
+          return next();
+        }
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+          "Content-Dispostion",
+          'inline; filename="' + invoiceName + '"'
+        ); // inline untuk lihat langsung
+        // attachment untk download
+        res.send(data);
+      });
+    })
+    .catch(err => next(err));
 };
