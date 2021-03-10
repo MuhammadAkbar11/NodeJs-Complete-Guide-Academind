@@ -34,6 +34,38 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
+exports.generateProducts = (req, res, next) => {
+  const generate = req.body.value;
+  let data = [];
+  for (let prod = 1; prod < generate; prod++) {
+    // const element = array[prod];
+    const id = 29 + prod;
+    data.push({
+      title: "Product-" + id,
+      price: {
+        num: 2000000,
+        rupiah: formatRupiah(2000000),
+      },
+      description:
+        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam obcaecati quibusdam facere dolorum animi molestiae dolores velit fugiat porro explicabo?",
+      imageUrl: "/uploads/images/products/empty.png",
+      createdAt: new Date(),
+      userId: req.user._id,
+    });
+  }
+
+  ProductModel.insertMany(data)
+    .then(result => {
+      console.log(result);
+      req.flash("flashdata", {
+        type: "success",
+        message: "Success adding new product",
+      });
+      res.redirect("/admin/products");
+    })
+    .catch(err => next(err));
+};
+
 exports.postAddProducts = (req, res, next) => {
   const title = req.body.title;
   const image = req.fileimg;

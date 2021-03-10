@@ -14,6 +14,12 @@ router.get("/products", isAuth, isAdmin, adminController.getProducts);
 
 //=> /admin/add-product => GET
 router.get("/add-product", isAuth, isAdmin, adminController.getAddProduct);
+router.post(
+  "/generate-productss",
+  isAuth,
+  isAdmin,
+  adminController.generateProducts
+);
 //=> /admin/add-product => POST
 router.post(
   "/add-product",
