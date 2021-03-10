@@ -4,11 +4,7 @@
 <main class="phoenix-main phoenix-main-100vh">
   <div class="container-fluid phx-h-100">
     <!-- Title page -->
-    <nav
-      class="mb-5"
-      style="--bs-breadcrumb-divider: '>'"
-      aria-label="breadcrumb"
-    >
+    <nav class="mb-5" style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="/products" class="text-primary">Products</a>
@@ -24,11 +20,7 @@
         <div class="card mb-3 phx-h-100 phx-card-detail">
           <div class="row no-gutters">
             <div class="col-md-4 d-flex align-items-center">
-              <img
-                src="<%= product.imageUrl %>"
-                class="card-img my-auto"
-                alt="..."
-              />
+              <img src="<%= product.imageUrl %>" class="card-img my-auto" alt="..." />
             </div>
             <div class="col-md-7 offset-md-1">
               <div class="card-body d-flex flex-column phx-h-100">
@@ -47,28 +39,18 @@
                 <div>
                   <% if (isAuthenticated) { %>
                   <form action="/cart" method="post">
-                    <button
-                      class="btn btn-primary text-white-500 mt-2 mt-md-4 mb-5 px-4"
-                      type="submit"
-                    >
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <button class="btn btn-primary text-white-500 mt-2 mt-md-4 mb-5 px-4" type="submit">
                       Add to Cart
                     </button>
-                    <input
-                      type="hidden"
-                      name="productId"
-                      value="<%= product._id %>"
-                    />
+                    <input type="hidden" name="productId" value="<%= product._id %>" />
                   </form>
                   <% } %>
                 </div>
 
                 <div class="mt-auto">
-                  <a
-                    href="/products"
-                    class="mt-auto text-primary text-primary-700-hover"
-                  >
-                    <small class="text-current"
-                      ><i height="18" data-feather="arrow-left"></i>
+                  <a href="/products" class="mt-auto text-primary text-primary-700-hover">
+                    <small class="text-current"><i height="18" data-feather="arrow-left"></i>
                     </small>
                     Back to products page
                   </a>
