@@ -225,7 +225,14 @@ exports.getInvoice = (req, res, next) => {
       const pdfDoc = new PDFdocument();
       pdfDoc.pipe(fs.createWriteStream(invoicePath));
       pdfDoc.pipe(res);
-      pdfDoc.text("Hello World");
+      pdfDoc.fontSize(26).text("Invoince");
+
+      order.products.forEach(prod => {
+        pdfDoc
+          .fontSize(16)
+          .text(prod.product.title + " - " + prod.quantity, {});
+      });
+
       pdfDoc.end();
     })
     .catch(err => next(err));
