@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -30,6 +31,11 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  multer({
+    dest: path.resolve(__dirname, "assets/images"),
+  }).single("image")
+);
 // eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -66,8 +72,8 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => {
+      console.log(err);
       throw new Error(err);
-      // next();
     });
 });
 

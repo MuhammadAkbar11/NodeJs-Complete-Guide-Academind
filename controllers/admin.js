@@ -5,6 +5,7 @@ const errMsgValidator = require("../util/errMsgValidator");
 
 exports.getProducts = (req, res, next) => {
   const flashdata = req.flash("flashdata");
+
   ProductModel.find()
     .then(products => {
       res.render("admin/admin-products", {
@@ -34,12 +35,24 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProducts = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const price = +req.body.price;
   const description = req.body.description;
   const userId = req.user._id;
 
+  let imageValidate = {
+    value: "",
+    msg: "Upload the image",
+    param: "image",
+    location: "file",
+  };
+
   const errors = validationResult(req);
+
+  console.log(image);
+  if (image === undefined) {
+    errors.errors.push(imageValidate);
+  }
   const errMsg = errMsgValidator(errors.array());
   if (!errors.isEmpty()) {
     return res.status(422).render("admin/admin-form-product", {
@@ -60,7 +73,7 @@ exports.postAddProducts = (req, res, next) => {
       rupiah: formatRupiah(price),
     },
     description: description,
-    imageUrl: imageUrl,
+    image: image,
     createdAt: new Date(),
     userId: userId,
   };

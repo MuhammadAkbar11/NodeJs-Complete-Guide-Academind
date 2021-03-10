@@ -16,6 +16,9 @@
         <% } %>
       </h5>
     </div>
+
+
+
     <div class="row px-0 mt-4">
       <div class="col-lg-8 pl-0 col-xl-11">
         <div class="card border-0 bg-transparent shadow-sm pt-4">
@@ -98,6 +101,9 @@
                           </div>
                           <% } else { %>
                           <input class="form-control bg-transparent " type="file" name="image" id="image">
+                          <% if(errors && errors.image) { %>
+                          <small class=" text-danger mt-3"> <%= errors.image?.message[0] %></small>
+                          <% } %>
                           <% }  %>
                         </div>
                       </div>
