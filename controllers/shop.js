@@ -8,6 +8,8 @@ const OrderModel = require("../models/orderModel");
 const IncNumbersModel = require("../models/incNumbers");
 
 const formatRupiah = require("../util/formatRupiah");
+const { validationResult } = require("express-validator");
+const errMsgValidator = require("../util/errMsgValidator");
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -123,8 +125,73 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+exports.checkout = async (req, res, next) => {
+  const shippingMethod = req.query.method;
+
+  let shippingMothodPrice = 7000;
+
+  switch (shippingMethod) {
+    case "fast":
+      shippingMothodPrice = 15000;
+      break;
+    case "express":
+      shippingMothodPrice = 25000;
+      break;
+    default:
+      shippingMothodPrice = 7000;
+      break;
+  }
+
+  const flashData = req.flash("flashData")[0];
+
+  req.user
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then(user => {
+      const { cart } = user;
+      const products = cart.items.map(item => {
+        return { ...item._doc, total: formatRupiah(item.total) };
+      });
+      const getTotalPrice = cart.items.reduce((sum, i) => {
+        return sum + +i.productId.price.num * +i.quantity;
+      }, 0);
+
+      const totalPrice = {
+        num: getTotalPrice + +shippingMothodPrice,
+        rupiah: formatRupiah(getTotalPrice + +shippingMothodPrice),
+      };
+
+      const totalItems = cart.items.reduce((sum, i) => {
+        return sum + +i.quantity;
+      }, 0);
+
+      res.render("shop/checkout", {
+        pageTitle: "Checkout | phoenix.com",
+        path: "/checkout",
+        products: products,
+        items: totalItems,
+        shippingMethod: shippingMethod,
+        shippingPrice: formatRupiah(shippingMothodPrice),
+        totalPrice: totalPrice,
+        errors: flashData?.errors,
+        inputsValue: flashData?.inputs,
+        // inputsValue: reqBody,
+      });
+    })
+    .catch(err => console.log(err));
+};
+
 exports.postOrder = async (req, res, next) => {
-  const shippingMethod = req.body.method.trim();
+  const {
+    shippingMethod,
+    name,
+    address,
+    city,
+    nameOnCard,
+    cardNumber,
+    expired,
+    cvc,
+  } = req.body;
 
   const getOrderNumber = await IncNumbersModel.findOne();
 
@@ -140,6 +207,18 @@ exports.postOrder = async (req, res, next) => {
     default:
       shippingMothodPrice = 7000;
       break;
+  }
+
+  const errors = validationResult(req);
+
+  const errMsg = errMsgValidator(errors.array());
+  if (!errors.isEmpty()) {
+    req.flash("flashData", {
+      errors: errMsg,
+      inputs: req.body,
+    });
+    res.redirect("checkout?method=" + shippingMethod);
+    return;
   }
 
   req.user
@@ -169,17 +248,24 @@ exports.postOrder = async (req, res, next) => {
       const orderModel = new OrderModel({
         orderNumber: `ORDER-${getOrderNumber.orderNumber}`,
         user: {
-          name: req.user.email,
+          email: req.user.email,
+          name: name,
           userId: req.user,
         },
         products: products,
         shipping: {
           method: shippingMethod,
           address: {
-            street: "jln Sudirman, No 45",
-            city: "Jakarta",
-            zip: "254546",
+            street: address,
+            city: city,
+            zip: "12345",
           },
+        },
+        payments: {
+          nameOnCard: nameOnCard,
+          cardNumber: cardNumber,
+          expired: expired,
+          cvc: cvc,
         },
         status: "process",
         createdAt: new Date(),

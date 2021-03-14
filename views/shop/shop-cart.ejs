@@ -99,9 +99,9 @@
         <div class="card card-body shadow-sm bg-light-gray rounded-0 border-0 px-4 py-5">
           <h5 class="mt-n1 text-dark text-uppercase">Summary</h5>
           <hr />
-          <form class="d-flex w-100 flex-column" action="/create-order" method="post">
+          <form class="d-flex w-100 flex-column" action="/checkout" method="GET">
             <!-- CSRF -->
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <!-- <input type="hidden" name="_csrf" value="<%= csrfToken %>" /> -->
             <div class="d-flex justify-content-between text-dark mt-2">
               <p class="text-uppercase">
                 Items <span class="ms-2"><%= items %></span>
@@ -120,18 +120,17 @@
               </select>
             </div>
 
-            <div class="d-flex justify-content-between text-dark fs-6 mt-4">
+            <!-- <div class="d-flex justify-content-between text-dark fs-6 mt-4">
               <p class="text-uppercase">Fee</p>
               <p>Rp. -</p>
-            </div>
-            <hr class="mt-n1" />
-            <div class="d-flex justify-content-between text-dark fs-6">
+            </div> -->
+            <!-- <hr class="mt-n1" /> -->
+            <div class="d-flex mt-4 justify-content-between text-dark fs-6">
               <p class="fw-bold text-uppercase">Total</p>
               <p><%= totalPrice.rupiah %></p>
             </div>
-            <hr />
             <div class="d-flex">
-              <button type="submit" class="w-100 btn btn-primary text-white-500">
+              <button type="submit" class="w-100 btn btn-primary rounded-0 text-white-500">
                 Checkout
               </button>
             </div>

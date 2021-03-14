@@ -1,0 +1,174 @@
+<%- include('../layouts/head.ejs') %> <%- include('../layouts/header.ejs') %>
+<%- include('../layouts/sidebar.ejs') %>
+
+<main class="phoenix-main">
+  <div class="container-fluid">
+    <!-- Title page -->
+    <div class="row mb-5">
+      <div class="fw-bold d-flex align-items-center">
+
+        <p class=" my-0 fs-2 fw-normal">Checkout</p>
+      </div>
+    </div>
+    <form action="/create-order" method="POST">
+      <div class="row mt-4 mb-5 ">
+
+        <div class=" col-lg-5 col-md-7 ">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <input type="hidden" name="shippingMethod" value="<%= shippingMethod %>">
+          <div class="d-flex flex-column">
+            <div>
+              <h6 class=" text-dark-gray fw-normal mb-0 ">Shipping Detail</h6>
+            </div>
+            <hr>
+            <div class="mb-3">
+              <label for="email" class="form-label text-dark-gray ">Email address</label>
+              <input readonly type="email" class="form-control  text-muted  rounded-0 " value="<%= user.email %>">
+            </div>
+            <div class="mb-3 mt-3 ">
+
+              <label for="name" class="form-label text-dark-gray ">Name</label>
+              <input type="text" class="form-control bg-transparent rounded-0 " id="name" name="name"
+                value="<%= inputsValue && inputsValue.name ? inputsValue.name : "" %>">
+              <% if(errors && errors.name) { %>
+              <small class=" text-danger mt-3"> <%= errors.name?.message[0] %></small>
+              <% } %>
+            </div>
+
+            <div class="mb-3 row  ">
+              <div class="col-lg-8 mb-md-3 ">
+                <label for="address" class="form-label text-dark-gray ">Address</label>
+                <input type="text" class="form-control bg-transparent rounded-0 " id="address" name="address"
+                  value="<%= inputsValue && inputsValue.address ? inputsValue.address : "" %>">
+                <% if(errors && errors.address) { %>
+                <small class=" text-danger mt-3"> <%= errors.address?.message[0] %></small>
+                <% } %>
+              </div>
+              <div class="col-lg-4 ">
+                <label for="city" class="form-label text-dark-gray ">City</label>
+                <input type="text" class="form-control bg-transparent rounded-0 " id="city" name="city"
+                  value="<%= inputsValue && inputsValue.city ? inputsValue.city : "" %>">
+                <% if(errors && errors.city) { %>
+                <small class=" text-danger mt-3"> <%= errors.city?.message[0] %></small>
+                <% } %>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="d-flex flex-column">
+            <div>
+              <h6 class=" text-dark-gray fw-normal mb-0 ">Payment Detail</h6>
+              <hr>
+            </div>
+            <div class="mb-3 mt-3 ">
+
+              <label for="nameOnCard" class="form-label text-dark-gray ">Name on Card</label>
+              <input type="text" class="form-control bg-transparent rounded-0 " id="nameOnCard" name="nameOnCard"
+                value="<%= inputsValue && inputsValue.nameOnCard ? inputsValue.nameOnCard : "" %>">
+              <% if(errors && errors.nameOnCard) { %>
+              <small class=" text-danger mt-3"> <%= errors.nameOnCard?.message[0] %></small>
+              <% } %>
+
+            </div>
+            <div class="mb-3">
+              <label for="cardNumber" class="form-label text-dark-gray ">Card Number</label>
+              <input type="text" class="form-control bg-transparent rounded-0 " name="cardNumber" id="cardNumber"
+                value="<%= inputsValue && inputsValue.cardNumber ? inputsValue.cardNumber : "" %>">
+              <% if(errors && errors.cardNumber) { %>
+              <small class=" text-danger mt-3"> <%= errors.cardNumber?.message[0] %></small>
+              <% } %>
+            </div>
+            <div class="mb-3 d-flex gap-4  ">
+              <div class="flex-grow-1 mb-md-3 ">
+                <label for="expired" class="form-label text-dark-gray ">Expired</label>
+                <input type="text" class="form-control bg-transparent rounded-0 " id="expired" name="expired"
+                  placeholder="ex: 04/24" value="<%= inputsValue && inputsValue.expired ? inputsValue.expired : "" %>">
+                <% if(errors && errors.expired) { %>
+                <small class=" text-danger mt-3"> <%= errors.expired?.message[0] %></small>
+                <% } %>
+              </div>
+              <div class="flex-grow-1 ">
+                <label for="cvc" class="form-label text-dark-gray ">CVC</label>
+                <input type="text" class="form-control bg-transparent rounded-0 " id="cvc" name="cvc"
+                  value="<%= inputsValue && inputsValue.cvc ? inputsValue.cvc : "" %>">
+                <% if(errors && errors.cvc) { %>
+                <small class=" text-danger mt-3"> <%= errors.cvc?.message[0] %></small>
+                <% } %>
+              </div>
+            </div>
+
+          </div>
+          <div class="d-none d-lg-flex">
+            <button class="btn btn-primary w-100 btn-lg rounded-0" type="submit">
+              <small>Purchase <%= totalPrice.rupiah %></small>
+            </button>
+          </div>
+
+        </div>
+        <div class=" col-sm-12 col-lg-6 ms-lg-auto mt-md-3">
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center justify-content-start gap-3">
+              <h6 class=" text-dark-gray fw-normal mb-0 ">Order items</h6>
+              <a href="/cart" class=" text-primary text-decoration-none "><small>Edit your cart</small></a>
+            </div>
+            <hr>
+            <div class="d-flex mt-3 mb-3 ">
+
+              <!-- cart items -->
+              <div class=" row  w-100">
+                <% products.forEach(prod => { %>
+                <div class="col-6 d-flex mb-3 justify-content-start align-items-center">
+                  <div>
+                    <img style="height: 70px; width: 80px;" class=" img-object-cover " src="<%= prod.productId.imageUrl
+                  %>" alt="">
+                  </div>
+                  <div class=" overflow-hidden  text-nowrap text-ellipsis ms-2 ">
+                    <small class="fw-bold" style="font-size: 14px;"><%= prod.productId.title %></small>
+                  </div>
+                </div>
+                <div class="col-2 d-flex align-items-center justify-content-center">
+                  <span class="text-primary">x<%= prod.quantity %> </span>
+                </div>
+                <div class="col-4 d-flex align-items-center justify-content-center fw-bold text-dark"><%= prod.total %>
+                </div>
+                <hr>
+                <% }) %>
+              </div>
+            </div>
+            <div class="row w-100">
+              <div class="col-6 ">
+                Subtotal
+              </div>
+              <div class="col-6 fw-bold text-end">
+                <%= totalPrice.rupiah %>
+              </div>
+
+              <div class="col-6  mt-2">
+                Shipping
+              </div>
+              <div class="col-6 fw-bold  text-end mt-2">
+                <%= shippingPrice %>
+              </div>
+              <div class="col-6 mt-2">
+                Total
+              </div>
+              <div class="col-6 fw-bold text-end mt-2">
+                <%= totalPrice.rupiah %>
+              </div>
+              <hr class="mt-3">
+            </div>
+          </div>
+          <div class="d-lg-none d-flex">
+            <button class="btn btn-primary w-100 btn-lg rounded-0" type="submit">
+              <small>Purchase <%= totalPrice.rupiah %></small>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../layouts/footer.ejs') %> <%- include('../layouts/end.ejs') %>

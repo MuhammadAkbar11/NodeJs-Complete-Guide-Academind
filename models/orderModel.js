@@ -8,6 +8,10 @@ const orderSchema = new Schema({
     required: true,
   },
   user: {
+    email: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -58,6 +62,24 @@ const orderSchema = new Schema({
         type: String,
         required: true,
       },
+    },
+  },
+  payments: {
+    nameOnCard: {
+      type: String,
+      required: true,
+    },
+    cardNumber: {
+      type: Number,
+      required: true,
+    },
+    expired: {
+      type: String,
+      required: true,
+    },
+    cvc: {
+      type: Number,
+      required: true,
     },
   },
   status: {
