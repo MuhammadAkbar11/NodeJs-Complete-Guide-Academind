@@ -1,7 +1,7 @@
 {
-  "name": "bagian_22__adding-payment",
+  "name": "bagian_23__working-with-rest-api-the-basics",
   "version": "1.1.1",
-  "description": "Tutorial Bagian 20 menambahkan fitur checkout",
+  "description": "Tutorial Bagian 23 Bekerja dengan rest Apis (basic) ",
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",
