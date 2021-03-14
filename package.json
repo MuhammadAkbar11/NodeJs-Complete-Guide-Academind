@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",
+    "start:api": "nodemon _simple-rest-api/app.js",
     "debug": "env PORT=8000 nodemon --inspect app.js",
     "check-port": "lsof -i tcp:5050",
     "webpack": "webpack  --config webpack.config.js "
