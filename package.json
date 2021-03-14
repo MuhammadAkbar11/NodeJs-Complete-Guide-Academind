@@ -1,7 +1,7 @@
 {
-  "name": "bagian_20__adding-pagination",
+  "name": "bagian_22__adding-payment",
   "version": "1.1.1",
-  "description": "Tutorial Bagian 20 menambahkan pagination",
+  "description": "Tutorial Bagian 20 menambahkan fitur checkout",
   "main": "app.js",
   "scripts": {
     "start": "nodemon  app.js",
