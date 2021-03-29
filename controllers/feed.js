@@ -3,7 +3,21 @@ const errMessageValidation = require("../utils/errMessageValidation");
 
 const PostModel = require("../models/postModel");
 
-exports.getPosts = (req, res, next) => {
+exports.getPosts = async (req, res, next) => {
+  try {
+    const posts = await PostModel.find();
+    return res.status(200).json({
+      message: "Fetched posts successfully ",
+      posts: posts,
+    });
+  } catch (error) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong";
+    }
+    next(err);
+  }
+
   res.status(200).json({
     posts: [
       {
@@ -51,7 +65,9 @@ exports.createPost = (req, res, next) => {
       return res.status(201).json({
         status: "success",
         message: "Post created successfully!",
-        post: result,
+        post: {
+          ...result,
+        },
       });
     })
     .catch(err => {
@@ -61,4 +77,27 @@ exports.createPost = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.getPost = async (req, res, next) => {
+  const postId = req.params.postId;
+  try {
+    const post = await PostModel.findById(postId);
+    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
+      post.imageUrl
+    }`;
+
+    post.imageUrl = imageUrl;
+
+    return res.status(200).json({
+      post: post,
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong";
+    }
+
+    next(err);
+  }
 };
