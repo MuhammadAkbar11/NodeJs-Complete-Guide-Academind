@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "alias-main": "alias gp-main=\"git push origin main\"",
+    "alias-azula": "alias gp-azula=\"git push azula Bagian_24__Working-with-REST-APIs-The-Practical-Application\""
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,8 @@
     "body-parser": "1.19.0",
     "express": "4.17.1",
     "express-validator": "^6.10.0",
-    "mongoose": "^5.12.2"
+    "mongoose": "^5.12.2",
+    "multer": "^1.4.2"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
