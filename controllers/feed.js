@@ -29,17 +29,17 @@ exports.createPost = (req, res, next) => {
 
   const errMessage = errMessageValidation(errors.array());
   if (!errors.isEmpty()) {
-    return res.status(422).json({
-      status: false,
-      message: "Validation failed",
-      errors: errMessage,
-    });
+    const error = new Error();
+    error.message = "Validation failed , entered data is incorrect";
+    error.statusCode = 422;
+    error.validationMessage = errMessage;
+    throw error;
   }
 
   const postModel = new PostModel({
     title: title,
     content: content,
-    imageUrl: "images/empty.png",
+    imageUrl: "posts/empty.png",
     creator: {
       name: "Akbar",
     },
@@ -54,5 +54,11 @@ exports.createPost = (req, res, next) => {
         post: result,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+        err.message = "Something went wrong";
+      }
+      next(err);
+    });
 };
