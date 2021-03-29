@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "alias-main": "git push origin main",
-    "alias-azula": "git push azula Bagian_24__Working-with-REST-APIs-The-Practical-Application"
+    "gp-main": "git push origin main",
+    "gp-azula": "git push azula Bagian_24__Working-with-REST-APIs-The-Practical-Application"
   },
   "repository": {
     "type": "git",
