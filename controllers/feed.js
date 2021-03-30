@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const errMessageValidation = require("../utils/errMessageValidation");
-
+const { deleteFile } = require("../utils/file");
 const PostModel = require("../models/postModel");
 
 exports.getPosts = async (req, res, next) => {
@@ -92,4 +92,51 @@ exports.getPost = async (req, res, next) => {
 
     next(err);
   }
+};
+
+exports.updatePost = async (req, res, next) => {
+  const postId = req.params.postId;
+  const title = req.body.title;
+  const content = req.body.content;
+
+  const fileimg = req.fileimg;
+
+  await PostModel.findById(postId)
+    .then(post => {
+      let imagePath = post.imageUrl;
+
+      if (fileimg.data !== null) {
+        deleteFile(post.imageUrl.substring(1));
+        imagePath = `/${fileimg.data?.path}`;
+      }
+
+      post.title = title;
+      post.content = content;
+      post.imageUrl = imagePath;
+
+      // return post.updateOne(
+      //   {
+      //     $set: { ...updatedData },
+      //   },
+      //   { upsert: true }
+      // );
+      return post.save();
+    })
+    .then(result => {
+      console.log(result);
+      return res.status(200).json({
+        status: "success",
+        message: "update successfully",
+        post: result,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+        err.message = "Something went wrong";
+      }
+
+      next(err);
+    });
 };
