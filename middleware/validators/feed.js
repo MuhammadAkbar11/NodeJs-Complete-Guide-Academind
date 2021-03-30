@@ -6,7 +6,7 @@ const postValidation = checkSchema({
     isLength: {
       errorMessage: "Title should be at least 10 characters long",
       options: {
-        min: 3,
+        min: 5,
       },
     },
   },
