@@ -17,21 +17,6 @@ exports.getPosts = async (req, res, next) => {
     }
     next(err);
   }
-
-  res.status(200).json({
-    posts: [
-      {
-        _id: 1,
-        title: "First Post",
-        content: "This is the first post!",
-        imageUrl: "images/empty.png",
-        creator: {
-          name: "Akbar",
-        },
-        createdAt: new Date(),
-      },
-    ],
-  });
 };
 
 exports.createPost = (req, res, next) => {
@@ -83,9 +68,7 @@ exports.getPost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
     const post = await PostModel.findById(postId);
-    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
-      post.imageUrl
-    }`;
+    const imageUrl = `${req.protocol}://${req.get("host")}/${post.imageUrl}`;
 
     post.imageUrl = imageUrl;
 
