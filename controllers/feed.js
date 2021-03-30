@@ -22,9 +22,18 @@ exports.getPosts = async (req, res, next) => {
 exports.createPost = (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
-  // Create post in db
+  const image = req.fileimg;
 
   const errors = validationResult(req);
+
+  if (image.type === "error") {
+    errors.errors.push({
+      value: "",
+      msg: image.message,
+      param: "image",
+      location: "file",
+    });
+  }
 
   const errMessage = errMessageValidation(errors.array());
   if (!errors.isEmpty()) {
@@ -38,7 +47,7 @@ exports.createPost = (req, res, next) => {
   const postModel = new PostModel({
     title: title,
     content: content,
-    imageUrl: "posts/empty.png",
+    imageUrl: "/" + image.data.path,
     creator: {
       name: "Akbar",
     },
@@ -68,7 +77,7 @@ exports.getPost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
     const post = await PostModel.findById(postId);
-    const imageUrl = `${req.protocol}://${req.get("host")}/${post.imageUrl}`;
+    const imageUrl = `${req.protocol}://${req.get("host")}${post.imageUrl}`;
 
     post.imageUrl = imageUrl;
 
