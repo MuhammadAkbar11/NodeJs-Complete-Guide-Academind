@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const feedRoutes = require("./routes/feed");
+const authRoutes = require("./routes/auth");
 const errorHandling = require("./middleware/errorHandling");
 const { uploadImage } = require("./middleware/uploads");
 
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/auth", authRoutes);
 app.use("/feed", feedRoutes);
 app.use(errorHandling);
 
