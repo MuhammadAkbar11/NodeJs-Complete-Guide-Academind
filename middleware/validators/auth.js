@@ -35,17 +35,4 @@ exports.signUpValidation = checkSchema({
       },
     },
   },
-  password2: {
-    notEmpty: {
-      errorMessage: "enter confirm password",
-    },
-    custom: {
-      options: (value, { req, location, path }) => {
-        if (value !== req.body.password) {
-          throw new Error("Password have to match!");
-        }
-        return true;
-      },
-    },
-  },
 });
