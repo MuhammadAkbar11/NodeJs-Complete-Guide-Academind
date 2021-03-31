@@ -45,3 +45,39 @@ exports.postSignUp = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.login = async (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  try {
+    const user = await UserModel.findOne({ email: email });
+    console.log(user);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    const domatch = await bcrypt.compare(password, user.password);
+
+    if (!domatch) {
+      const error = new Error("Password wrong!");
+      error.statusCode = 401;
+      throw error;
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Login success",
+      user: user,
+    });
+  } catch (error) {
+    console.log(error, "error auth");
+    if (!error.statusCode) {
+      error.statusCode = 500;
+      error.message = "Something went wrong";
+    }
+    next(error);
+  }
+};
