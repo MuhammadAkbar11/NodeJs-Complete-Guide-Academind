@@ -56,12 +56,11 @@ exports.createPost = (req, res, next) => {
   postModel
     .save()
     .then(result => {
+      console.log(result, "daat");
       return res.status(201).json({
         status: "success",
         message: "Post created successfully!",
-        post: {
-          ...result,
-        },
+        post: result,
       });
     })
     .catch(err => {
@@ -128,6 +127,40 @@ exports.updatePost = async (req, res, next) => {
         status: "success",
         message: "update successfully",
         post: result,
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+        err.message = "Something went wrong";
+      }
+
+      next(err);
+    });
+};
+
+exports.deletePost = (req, res, next) => {
+  const postId = req.params.postId;
+
+  PostModel.findById(postId)
+    .then(post => {
+      if (!post) {
+        const error = new Error();
+        error.message = "Could not find post";
+        error.statusCode = 404;
+
+        throw error;
+      }
+      deleteFile(post.imageUrl.substring(1));
+
+      return PostModel.findByIdAndRemove(postId);
+    })
+    .then(result => {
+      console.log(result);
+      return res.status(200).json({
+        status: "success",
+        message: "Deleted post successfully",
       });
     })
     .catch(err => {
