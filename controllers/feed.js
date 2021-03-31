@@ -4,13 +4,22 @@ const { deleteFile } = require("../utils/file");
 const PostModel = require("../models/postModel");
 
 exports.getPosts = async (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 2;
+
   try {
-    const posts = await PostModel.find();
+    const totalItems = await PostModel.countDocuments();
+    const posts = await PostModel.find()
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+
     return res.status(200).json({
       message: "Fetched posts successfully ",
       posts: posts,
+      totalItems: totalItems,
     });
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
       err.message = "Something went wrong";
