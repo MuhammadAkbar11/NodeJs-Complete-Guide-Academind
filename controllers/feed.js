@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const errMessageValidation = require("../utils/errMessageValidation");
 const { deleteFile } = require("../utils/file");
 const PostModel = require("../models/postModel");
+const UserModel = require("../models/userModel");
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -28,11 +29,11 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   const image = req.fileimg;
-
+  let creator;
   const errors = validationResult(req);
 
   if (image.type === "error") {
@@ -57,28 +58,57 @@ exports.createPost = (req, res, next) => {
     title: title,
     content: content,
     imageUrl: "/" + image.data.path,
-    creator: {
-      name: "Akbar",
-    },
+    creator: req.userId,
   });
 
-  postModel
-    .save()
-    .then(result => {
-      console.log(result, "daat");
-      return res.status(201).json({
-        status: "success",
-        message: "Post created successfully!",
-        post: result,
-      });
-    })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-        err.message = "Something went wrong";
-      }
-      next(err);
+  try {
+    const createdPost = await postModel.save();
+
+    const user = await UserModel.findById(req.userId);
+    creator = user;
+    user.posts.push(createdPost);
+    user.save();
+
+    return res.status(201).json({
+      status: "success",
+      message: "Post created successfully!",
+      post: createdPost,
+      creator: { _id: creator._id, name: creator.name },
     });
+  } catch (err) {
+    console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong";
+    }
+    next(err);
+  }
+
+  // postModel
+  //   .save()
+  //   .then(result => {
+  //     return UserModel.findById(req.userId);
+  //   })
+  //   .then(user => {
+  //     creator = user;
+  //     user.posts.push(postModel);
+  //     return user.save();
+  //   })
+  //   .then(result => {
+  //     return res.status(201).json({
+  //       status: "success",
+  //       message: "Post created successfully!",
+  //       post: result,
+  //       creator: { _id: creator._id, name: creator.name },
+  //     });
+  //   })
+  //   .catch(err => {
+  //     if (!err.statusCode) {
+  //       err.statusCode = 500;
+  //       err.message = "Something went wrong";
+  //     }
+  //     next(err);
+  //   });
 };
 
 exports.getPost = async (req, res, next) => {
