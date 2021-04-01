@@ -1,5 +1,6 @@
-const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const UserModel = require("../models/userModel");
 const errMessageValidation = require("../utils/errMessageValidation");
 
@@ -67,10 +68,20 @@ exports.login = async (req, res, next) => {
       throw error;
     }
 
+    const token = await jwt.sign(
+      {
+        email: user.email,
+        userId: user._id.toString(),
+      },
+      "node-message-secret",
+      { expiresIn: "2h" }
+    );
+
     return res.status(200).json({
       status: "success",
       message: "Login success",
-      user: user,
+      token: token,
+      userId: user._id.toString(),
     });
   } catch (error) {
     console.log(error, "error auth");
