@@ -67,8 +67,8 @@ exports.createPost = async (req, res, next) => {
     const user = await UserModel.findById(req.userId);
     creator = user;
     user.posts.push(createdPost);
-    user.save();
-
+    const newUser = await user.save();
+    console.log(newUser, "new");
     return res.status(201).json({
       status: "success",
       message: "Post created successfully!",
@@ -139,44 +139,48 @@ exports.updatePost = async (req, res, next) => {
 
   const fileimg = req.fileimg;
 
-  await PostModel.findById(postId)
-    .then(post => {
-      let imagePath = post.imageUrl;
+  try {
+    const post = await PostModel.findById(postId);
 
-      if (fileimg.data !== null) {
-        deleteFile(post.imageUrl.substring(1));
-        imagePath = `/${fileimg.data?.path}`;
-      }
+    if (!post) {
+      const error = new Error("Could not find post");
+      error.statusCode = 404;
+      throw error;
+    }
 
-      post.title = title;
-      post.content = content;
-      post.imageUrl = imagePath;
+    if (post.creator.toString() !== req.userId) {
+      const error = new Error("Not  Authorize ");
+      error.statusCode = 403;
+      throw error;
+    }
 
-      // return post.updateOne(
-      //   {
-      //     $set: { ...updatedData },
-      //   },
-      //   { upsert: true }
-      // );
-      return post.save();
-    })
-    .then(result => {
-      console.log(result);
-      return res.status(200).json({
-        status: "success",
-        message: "update successfully",
-        post: result,
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      if (!err.statusCode) {
-        err.statusCode = 500;
-        err.message = "Something went wrong";
-      }
+    let imagePath = post.imageUrl;
 
-      next(err);
+    if (fileimg.data !== null) {
+      deleteFile(post.imageUrl.substring(1));
+      imagePath = `/${fileimg.data?.path}`;
+    }
+
+    post.title = title;
+    post.content = content;
+    post.imageUrl = imagePath;
+
+    const result = await post.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: "update successfully",
+      post: result,
     });
+  } catch (err) {
+    console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong";
+    }
+
+    next(err);
+  }
 };
 
 exports.deletePost = (req, res, next) => {
@@ -191,6 +195,13 @@ exports.deletePost = (req, res, next) => {
 
         throw error;
       }
+
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error("Not Authorize");
+        error.statusCode = 403;
+        throw error;
+      }
+
       deleteFile(post.imageUrl.substring(1));
 
       return PostModel.findByIdAndRemove(postId);
