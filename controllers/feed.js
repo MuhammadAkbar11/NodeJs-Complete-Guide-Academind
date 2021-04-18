@@ -83,32 +83,6 @@ exports.createPost = async (req, res, next) => {
     }
     next(err);
   }
-
-  // postModel
-  //   .save()
-  //   .then(result => {
-  //     return UserModel.findById(req.userId);
-  //   })
-  //   .then(user => {
-  //     creator = user;
-  //     user.posts.push(postModel);
-  //     return user.save();
-  //   })
-  //   .then(result => {
-  //     return res.status(201).json({
-  //       status: "success",
-  //       message: "Post created successfully!",
-  //       post: result,
-  //       creator: { _id: creator._id, name: creator.name },
-  //     });
-  //   })
-  //   .catch(err => {
-  //     if (!err.statusCode) {
-  //       err.statusCode = 500;
-  //       err.message = "Something went wrong";
-  //     }
-  //     next(err);
-  //   });
 };
 
 exports.getPost = async (req, res, next) => {
@@ -206,8 +180,14 @@ exports.deletePost = (req, res, next) => {
 
       return PostModel.findByIdAndRemove(postId);
     })
-    .then(result => {
-      console.log(result);
+    .then(() => {
+      return UserModel.findById(req.userId);
+    })
+    .then(user => {
+      user.posts.pull(postId);
+      return user.save();
+    })
+    .then(() => {
       return res.status(200).json({
         status: "success",
         message: "Deleted post successfully",
